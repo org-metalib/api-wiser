@@ -1,0 +1,6 @@
+org/metalib/wiser/api/mvn/plugin/MyMojo.class
+org/metalib/api/wiser/api_wiser_maven_plugin/HelpMojo.class
+org/metalib/wiser/api/mvn/plugin/SyncMojo.class
+org/metalib/wiser/api/mvn/plugin/conversion/SingleToMulti.class
+org/metalib/wiser/api/mvn/plugin/SyncMojo$1.class
+org/metalib/wiser/api/mvn/plugin/ApiWiserBuildProperties.class

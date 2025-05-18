@@ -1,0 +1,55 @@
+---
+openapi: 3.1.0
+info:
+  title: Sample API
+  version: 0.1.9
+paths:
+  /address:
+    x-api-wiser:
+      context:
+        biz:
+          imports:
+            - org.metalib.api.wiser.Service
+          properties:
+            - name: service
+              type: Service
+    post:
+      requestBody:
+        required: true
+        content:
+          "*/*":
+            schema:
+              type:
+                - string
+      responses:
+        default:
+          description: no response
+  /info:
+    post:
+      requestBody:
+        required: true
+        content:
+          "*/*":
+            schema:
+              type:
+                - string
+      responses:
+        default:
+          description: no response
+    get:
+      responses:
+        default:
+          description: retrieve application information
+components:
+  schemas:
+    address:
+      type: object
+      properties:
+        first-name:
+          type: string
+        last-name:
+          type: string
+x-api-wiser:
+  dependencies:
+    biz:
+      - org.metalib.api.wiser.services:api-wiser-service

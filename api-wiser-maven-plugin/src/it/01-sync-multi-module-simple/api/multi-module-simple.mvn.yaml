@@ -1,0 +1,10 @@
+---
+dependency:
+  api:
+    /info:
+      - type: db.DbEntityRepo
+        name: dbEnity
+  module:
+    model:
+    api:
+    biz:

@@ -1,0 +1,6 @@
+org.metalib.wiser.api.template.biz.BizTemplate
+org.metalib.wiser.api.template.api.ApiTemplate
+org.metalib.wiser.api.template.model.jackson.JacksonModelTemplate
+org.metalib.wiser.api.template.model.gson.GsonModelTemplate
+org.metalib.wiser.api.template.root.ReadmeTemplate
+org.metalib.wiser.api.template.root.GitIgnoreTemplate

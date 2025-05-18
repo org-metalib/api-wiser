@@ -1,0 +1,3 @@
+org.metalib.wiser.api.template.jackson.http.client.ResponseWrapperTemplate
+org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClientTemplate
+org.metalib.wiser.api.template.jackson.http.client.MavenHttpClientTemplate

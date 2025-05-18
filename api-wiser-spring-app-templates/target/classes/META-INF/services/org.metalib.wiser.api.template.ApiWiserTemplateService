@@ -1,0 +1,3 @@
+org.metalib.wiser.api.template.spring.MavenSpringAppTemplate
+org.metalib.wiser.api.template.spring.SpringAppTemplate
+org.metalib.wiser.api.template.spring.SpringControllerTemplate

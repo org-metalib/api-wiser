@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.metalib.maven.pom</groupId>
+        <artifactId>metalib-spring-pom</artifactId>
+        <version>0.0.60</version>
+    </parent>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+
+    <packaging>pom</packaging>
+
+    <modules/>
+
+    <properties>
+        <api-wiser.version>0.0.1-SNAPSHOT</api-wiser.version>
+        <api-wiser.module>root</api-wiser.module>
+        <api-wiser.project-package>${package}</api-wiser.project-package>
+    </properties>
+
+    <dependencies/>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.metalib.api.wiser</groupId>
+                <artifactId>api-wiser-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.metalib.api.wiser</groupId>
+                    <artifactId>api-wiser-maven-plugin</artifactId>
+                    <version>${api-wiser.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>sync</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.metalib.api.wiser</groupId>
+                            <artifactId>api-wiser-maven-templates</artifactId>
+                            <version>${api-wiser.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

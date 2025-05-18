@@ -1,0 +1,4 @@
+org.metalib.wiser.api.template.maven.MavenRootPom
+org.metalib.wiser.api.template.maven.MavenApiPom
+org.metalib.wiser.api.template.maven.MavenModelPom
+org.metalib.wiser.api.template.maven.MavenBizPom

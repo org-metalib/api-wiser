@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.metalib.maven.openapi.buddy.it</groupId>
+    <artifactId>multi-module-simple</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+  <artifactId>multi-module-simple-model</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <properties>
+    <api-wiser.module>model</api-wiser.module>
+  </properties>
+</project>
