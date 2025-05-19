@@ -1,0 +1,156 @@
+
+AdditionalPropertiesClass.java                        AdditionalPropertiesClass.java
+Animal.java                                           Animal.java
+Apple.java                                            Apple.java
+AppleReq.java                                         AppleReq.java
+ArrayOfArrayOfNumberOnly.java                         ArrayOfArrayOfNumberOnly.java
+ArrayOfNumberOnly.java                                ArrayOfNumberOnly.java
+ArrayTest.java                                        ArrayTest.java
+Banana.java                                           Banana.java
+BananaReq.java                                        BananaReq.java
+BasquePig.java                                        BasquePig.java
+Capitalization.java                                   Capitalization.java
+Cat.java                                              Cat.java
+CatAllOf.java                                         CatAllOf.java
+Category.java                                         Category.java
+ChildCat.java                                         ChildCat.java
+ChildCatAllOf.java                                    ChildCatAllOf.java
+ClassModel.java                                       ClassModel.java
+Client.java                                           Client.java
+ComplexQuadrilateral.java                             ComplexQuadrilateral.java
+DanishPig.java                                        DanishPig.java
+DeprecatedObject.java                                 DeprecatedObject.java
+Dog.java                                              Dog.java
+DogAllOf.java                                         DogAllOf.java
+Drawing.java                                          Drawing.java
+EnumArrays.java                                       EnumArrays.java
+EnumClass.java                                        EnumClass.java
+EnumTest.java                                         EnumTest.java
+EquilateralTriangle.java                              EquilateralTriangle.java
+FakeBigDecimalMap200Response.java                     FakeBigDecimalMap200Response.java
+FileSchemaTestClass.java                              FileSchemaTestClass.java
+Foo.java                                              Foo.java
+FooGetDefaultResponse.java                            FooGetDefaultResponse.java
+FormatTest.java                                       FormatTest.java
+Fruit.java                                            Fruit.java
+FruitReq.java                                         FruitReq.java
+GmFruit.java                                          GmFruit.java
+GrandparentAnimal.java                                GrandparentAnimal.java
+HasOnlyReadOnly.java                                  HasOnlyReadOnly.java
+HealthCheckResult.java                                HealthCheckResult.java
+IsoscelesTriangle.java                                IsoscelesTriangle.java
+Mammal.java                                           Mammal.java
+MapTest.java                                          MapTest.java
+MixedPropertiesAndAdditionalPropertiesClass.java      MixedPropertiesAndAdditionalPropertiesClass.java
+Model200Response.java                                 Model200Response.java
+ModelApiResponse.java                                 ModelApiResponse.java
+ModelFile.java                                        ModelFile.java
+ModelList.java                                        ModelList.java
+ModelReturn.java                                      ModelReturn.java
+Name.java                                             Name.java
+NullableClass.java                                    NullableClass.java
+NullableShape.java                                    NullableShape.java
+NumberOnly.java                                       NumberOnly.java
+ObjectWithDeprecatedFields.java                       ObjectWithDeprecatedFields.java
+Order.java                                            Order.java
+OuterComposite.java                                   OuterComposite.java
+OuterEnum.java                                        OuterEnum.java
+OuterEnumDefaultValue.java                            OuterEnumDefaultValue.java
+OuterEnumInteger.java                                 OuterEnumInteger.java
+OuterEnumIntegerDefaultValue.java                     OuterEnumIntegerDefaultValue.java
+ParentPet.java                                        ParentPet.java
+Pet.java                                              Pet.java
+Pig.java                                              Pig.java
+Quadrilateral.java                                    Quadrilateral.java
+QuadrilateralInterface.java                           QuadrilateralInterface.java
+ReadOnlyFirst.java                                    ReadOnlyFirst.java
+ScaleneTriangle.java                                  ScaleneTriangle.java
+Shape.java                                            Shape.java
+ShapeInterface.java                                   ShapeInterface.java
+ShapeOrNull.java                                      ShapeOrNull.java
+SimpleQuadrilateral.java                              SimpleQuadrilateral.java
+SpecialModelName.java                                 SpecialModelName.java
+Tag.java                                              Tag.java
+Triangle.java                                         Triangle.java
+TriangleInterface.java                                TriangleInterface.java
+User.java                                             User.java
+Whale.java                                            Whale.java
+Zebra.java                                            Zebra.java
+
+AdditionalPropertiesClass.java
+Animal.java
+Apple.java
+AppleReq.java
+ArrayOfArrayOfNumberOnly.java
+ArrayOfNumberOnly.java
+ArrayTest.java
+Banana.java
+BananaReq.java
+BasquePig.java
+Capitalization.java
+Cat.java
+CatAllOf.java
+Category.java
+ChildCat.java
+ChildCatAllOf.java
+ClassModel.java
+Client.java
+ComplexQuadrilateral.java
+DanishPig.java
+DeprecatedObject.java
+Dog.java
+DogAllOf.java
+Drawing.java
+EnumArrays.java
+EnumClass.java
+EnumTest.java
+EquilateralTriangle.java
+FakeBigDecimalMap200Response.java
+FileSchemaTestClass.java
+Foo.java
+FooGetDefaultResponse.java
+FormatTest.java
+Fruit.java
+FruitReq.java
+GmFruit.java
+GrandparentAnimal.java
+HasOnlyReadOnly.java
+HealthCheckResult.java
+IsoscelesTriangle.java
+Mammal.java
+MapTest.java
+MixedPropertiesAndAdditionalPropertiesClass.java
+Model200Response.java
+ModelApiResponse.java
+ModelFile.java
+ModelList.java
+ModelReturn.java
+Name.java
+NullableClass.java
+NullableShape.java
+NumberOnly.java
+ObjectWithDeprecatedFields.java
+Order.java
+OuterComposite.java
+OuterEnum.java
+OuterEnumDefaultValue.java
+OuterEnumInteger.java
+OuterEnumIntegerDefaultValue.java
+ParentPet.java
+Pet.java
+Pig.java
+Quadrilateral.java
+QuadrilateralInterface.java
+ReadOnlyFirst.java
+ScaleneTriangle.java
+Shape.java
+ShapeInterface.java
+ShapeOrNull.java
+SimpleQuadrilateral.java
+SpecialModelName.java
+Tag.java
+Triangle.java
+TriangleInterface.java
+User.java
+Whale.java
+Zebra.java
