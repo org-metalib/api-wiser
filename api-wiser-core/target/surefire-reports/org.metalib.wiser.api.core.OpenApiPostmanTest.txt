@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.metalib.wiser.api.core.OpenApiPostmanTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 1.429 s -- in org.metalib.wiser.api.core.OpenApiPostmanTest
