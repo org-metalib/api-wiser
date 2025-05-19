@@ -46,39 +46,73 @@ import static org.metalib.wiser.api.template.ApiWiserFinals.POM;
 import static org.metalib.wiser.api.template.ApiWiserFinals.ROOT;
 
 /**
- * Initializes current maven project
+ * Initializes API Wiser controls for a Maven project.
+ * <p>
+ * This goal can:
+ * 1. Convert a single-module project to a multi-module project
+ * 2. Generate code based on an API specification file
+ * 3. Set up source directories for the generated code
+ * 4. Configure Maven project properties and dependencies
  */
 @Mojo( name = "sync", defaultPhase = LifecyclePhase.INITIALIZE)
 public class SyncMojo extends AbstractMojo {
 
     static final String X_API_WISER_MAVEN_MODEL = "x" + DASH + API_WISER + DASH + "maven-model";
 
+    /**
+     * Maven model reader for reading POM files
+     */
     @Inject
     DefaultModelReader modelReader;
 
+    /**
+     * Maven model writer for writing POM files
+     */
     @Inject
     DefaultModelWriter modelWriter;
 
+    /**
+     * The current Maven project
+     */
     @Inject
     MavenProject mavenProject;
 
+    /**
+     * The base directory of the project
+     */
     @Parameter( defaultValue = "${project.basedir}", property = "api-wiser.project-dir", required = true )
     private File projectDir;
 
+    /**
+     * The build directory of the project
+     */
     @Parameter( defaultValue = "${project.build.directory}", property = "api-wiser.project-build-dir", required = true )
     private File projectBuildDir;
 
+    /**
+     * The base package for the generated code
+     */
     @Parameter( property = "api-wiser.project-package", required = true )
     private String projectPackage;
 
-    private ObjectMapper jacksonYaml = new ObjectMapper(new YAMLFactory());
-
+    /**
+     * Executes the goal.
+     * <p>
+     * This method initializes API Wiser controls for the Maven project.
+     * If the project is a single-module project, it will be converted to a multi-module project.
+     * Otherwise, it will set up source directories and generate code based on the API specification.
+     * 
+     * @throws MojoExecutionException if an error occurs during execution
+     * @throws MojoFailureException if the execution fails
+     */
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Initializing Api Wiser controls");
         try {
+            // Read the project's POM file
             final var model = modelReader.read(mavenProject.getModel().getPomFile(), Map.of());
 
+            // If this is a single-module project, convert it to a multi-module project
             if (isSinglePomProject(mavenProject)) {
                 final var pluginDescriptor = (PluginDescriptor) this.getPluginContext().get("pluginDescriptor");
                 if (new SingleToMulti(pluginDescriptor, modelWriter, getLog()).update(model)) {
@@ -87,11 +121,15 @@ public class SyncMojo extends AbstractMojo {
                 getLog().info("Completing Api Wiser controls. Please, run maven api:sync again.");
                 return;
             }
+
+            // If this is not the root module, add source directories
             if (!ROOT.equals(moduleName())) {
                 mavenProject.addCompileSourceRoot(new File(projectBuildDir, "generated-sources").toString());
                 mavenProject.addTestCompileSourceRoot(new File(projectBuildDir, "generated-test-sources").toString());
             }
+
             try {
+                // Create a generator for the API code
                 final var apiWiserBuildProp = new ApiWiserBuildProperties();
                 final var generator = ApiWiserCode.builder()
                         .dry(false)
@@ -111,6 +149,8 @@ public class SyncMojo extends AbstractMojo {
                         .additionalProperty(X_API_WISER_MAVEN_MODEL, model)
                         .additionalProperty(X_API_WISER_MAVEN_DEPENDENCIES_NAME, List.of())
                         .build().generator();
+
+                // Configure the generator
                 final var config = generator.config();
                 ApiWiserTemplates.list().forEach(v -> v.listener(new ApiWiserEvent() {
                     @Override
@@ -123,73 +163,12 @@ public class SyncMojo extends AbstractMojo {
                         return config;
                     }
                 }));
+
+                // Generate the code
                 generator.generate();
             } catch (Exception e) {
                 throw new MojoExecutionException("ApiWise Codegen Exception", e);
             }
-/*
-            final var model1 = modelReader.read(new File("pom.xml"), Map.of());
-            final var modelProperties = model1.getProperties();
-            model0.getProperties().forEach((k,v) -> {
-                final var key = k.toString();
-                final var value = v.toString();
-                final var property = model1.getProperties().getProperty(key);
-                if (null == property) {
-                    modelProperties.setProperty(key, value);
-                }
-            });
-            getLog().info("PluginArtifacts:");
-            final var model1Build = Optional.of(model1)
-                    .map(Model::getBuild)
-                    .orElseGet(() -> {
-                        final var build = new Build();
-                        model1.setBuild(build);
-                        return build;
-                    });
-            final var model1Plugins = Optional.of(model1Build)
-                    .map(PluginContainer::getPlugins)
-                    .orElseGet(() -> {
-                        final var plugins = new ArrayList<Plugin>();
-                        model1Build.setPlugins(plugins);
-                        return plugins;
-                    });
-            final var model1PluginKeys = model1Plugins.stream().map(SyncMojo::pluginKey).collect(toSet());
-            model0.getBuild().getPlugins().stream()
-                    .filter(v -> !model1PluginKeys.contains(pluginKey(v)))
-                    .forEach(plugin -> {
-                        getLog().info(format("    adding <%s> plugin%n", plugin));
-                        model1Plugins.add(plugin);
-                    });
-            getLog().info("PluginManagementArtifacts:");
-            final var model1PluginManagement = Optional.of(model1Build)
-                    .map(PluginConfiguration::getPluginManagement)
-                    .orElseGet(() -> {
-                        final var pluginManagement = new PluginManagement();
-                        model1Build.setPluginManagement(pluginManagement);
-                        return pluginManagement;
-                    });
-            final var model1PluginManagementPlugins = Optional.of(model1Build)
-                    .map(PluginConfiguration::getPluginManagement)
-                    .map(PluginContainer::getPlugins)
-                    .orElseGet(() -> {
-                        final var plugins = new ArrayList<Plugin>();
-                        model1PluginManagement.setPlugins(plugins);
-                        return plugins;
-                    });
-            final var model1PluginManagementKeys = model1PluginManagement.getPluginsAsMap().keySet();
-            Optional.of(model0)
-                    .map(Model::getBuild)
-                    .map(PluginConfiguration::getPluginManagement)
-                    .map(PluginContainer::getPlugins)
-                    .stream()
-                    .flatMap(Collection::stream)
-                    .filter(v -> !model1PluginManagementKeys.contains(pluginKey(v)))
-                    .forEach(plugin -> {
-                        getLog().info(format("    adding <%s> plugin%n", plugin));
-                        model1PluginManagementPlugins.add(plugin);
-                    });
-            modelWriter.write(new File(projectDir, "pom.xml"), Map.of(), model1);
- */
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

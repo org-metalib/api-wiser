@@ -24,31 +24,67 @@ import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClie
 import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClientTemplateBuilder.HTTP;
 import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClientTemplateBuilder.MODULE_NAME;
 
+/**
+ * Template service for generating a ResponseWrapper class.
+ * 
+ * <p>This template generates a generic wrapper class for HTTP responses that can hold
+ * either a typed body (deserialized from JSON) or raw text content. The wrapper is used
+ * by the HTTP client to handle API responses in a consistent way.</p>
+ */
 public class ResponseWrapperTemplate implements ApiWiserTemplateService {
 
+    /** The name of this template */
     public static final String TEMPLATE_NAME = "response-wrapper";
+
+    /** The unique identifier for this template */
     public static final String TEMPLATE_ID = "api-wiser::" + TEMPLATE_NAME;
 
+    /**
+     * Returns the unique identifier for this template.
+     * 
+     * @return the template ID
+     */
     @Override
     public String id() {
         return TEMPLATE_ID;
     }
 
+    /**
+     * Returns the name of the module this template belongs to.
+     * 
+     * @return the module name
+     */
     @Override
     public String moduleName() {
         return MODULE_NAME;
     }
 
+    /**
+     * Indicates that this template generates a supporting file rather than an API file.
+     * 
+     * @return true as this is a supporting file
+     */
     @Override
     public boolean isSupportingFile() {
         return true;
     }
 
+    /**
+     * Returns the file extension for the generated file.
+     * 
+     * @return "java" as the file extension
+     */
     @Override
     public String fileExtension() {
         return JAVA;
     }
 
+    /**
+     * Defines the target file location for the generated ResponseWrapper class.
+     * 
+     * @param config the API Wiser configuration
+     * @return the target file information
+     */
     @Override
     public ApiWiserTargetFile targetFile(ApiWiserConfig config) {
         return new ApiWiserTargetFile() {
@@ -70,6 +106,12 @@ public class ResponseWrapperTemplate implements ApiWiserTemplateService {
         };
     }
 
+    /**
+     * Generates the Java code for the ResponseWrapper class.
+     * 
+     * @param bundle the API Wiser bundle containing configuration and context
+     * @return the generated Java code as a string
+     */
     @Override
     public String toText(ApiWiserBundle bundle) {
         final var jacksonBodyHandlerPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
@@ -77,7 +119,16 @@ public class ResponseWrapperTemplate implements ApiWiserTemplateService {
                 .build().toString();
     }
 
-    // https://stackoverflow.com/questions/57629401/deserializing-json-using-java-11-httpclient-and-custom-bodyhandler-with-jackson
+    /**
+     * Builds the TypeSpec for the ResponseWrapper class.
+     * 
+     * <p>The ResponseWrapper is a generic class that can hold either a typed body (deserialized from JSON)
+     * or raw text content. It has two constructors: one for typed bodies and one for raw byte content.</p>
+     * 
+     * <p>Based on: https://stackoverflow.com/questions/57629401/deserializing-json-using-java-11-httpclient-and-custom-bodyhandler-with-jackson</p>
+     * 
+     * @return the TypeSpec builder for the ResponseWrapper class
+     */
     static TypeSpec.Builder genericResponseTypeBuilder() {
         final var typeVariableW = TypeVariableName.get("T");
         final var className =LOWER_HYPHEN.to(UPPER_CAMEL, TEMPLATE_NAME);

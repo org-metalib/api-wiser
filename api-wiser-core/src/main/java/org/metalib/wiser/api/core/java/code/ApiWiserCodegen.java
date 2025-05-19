@@ -41,6 +41,19 @@ import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER;
 import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_CONTEXT;
 import static org.openapitools.codegen.utils.StringUtils.camelize;
 
+/**
+ * A generator configuration implementation for the API Wiser system.
+ * This class extends AbstractJavaCodegen from OpenAPI Tools and implements the ApiWiserConfig interface.
+ * It is responsible for configuring and customizing the code generation process for Java code
+ * generated from OpenAPI specifications.
+ * 
+ * The class handles:
+ * - Setting up template files for models and APIs
+ * - Customizing file naming and locations
+ * - Processing models and operations
+ * - Managing supporting files
+ * - Providing configuration information through the ApiWiserConfig interface
+ */
 public class ApiWiserCodegen extends AbstractJavaCodegen implements ApiWiserConfig {
 
     protected final Map<String, String> apiFolders = new HashMap<>();

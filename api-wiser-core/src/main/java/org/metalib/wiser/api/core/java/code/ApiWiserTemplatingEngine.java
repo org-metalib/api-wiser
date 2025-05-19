@@ -15,6 +15,19 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toSet;
 
+/**
+ * A templating engine adapter for the API Wiser system that implements the OpenAPI Tools
+ * TemplatingEngineAdapter interface.
+ * 
+ * This class is responsible for:
+ * - Loading and managing templates from ApiWiserTemplates
+ * - Determining which files the engine can handle
+ * - Compiling templates using the appropriate template service
+ * 
+ * The engine is used by {@link ApiWiserGenerator} to process templates during code generation.
+ * It delegates the actual template processing to the appropriate {@link ApiWiserTemplateService}
+ * implementation based on the template ID.
+ */
 public class ApiWiserTemplatingEngine implements TemplatingEngineAdapter {
 
     public static final String ENGINE_ID = "java-poet-templating-engine";

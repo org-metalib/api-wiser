@@ -19,7 +19,6 @@ import java.util.Set;
 public class ApiBuilder {
   public static TypeSpec.Builder createApiBuilder(ApiWiserBundle openApiModel) {
     final var operations = openApiModel.codeOperation();
-    //String controllerClassname = StringUtils.camelize(controllerPrefix + "_" + operations.getPathPrefix() + "_" + controllerSuffix);
     final var className = operations.map(ApiWiserBundle.CodeOperation::className)
         .map(StringUtils::camelize)
         .orElse("{Class Name not provided}");

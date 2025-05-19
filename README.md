@@ -1,9 +1,23 @@
 # The Api Wiser 
 
-The Api Wiser project is an API generator that converts OpenAPIAPI specifications into Java code
+## Overview
 
-Another API generator
-https://github.com/fern-api/fern-java
+The Api Wiser project is an API generator that converts OpenAPI specifications into Java code
+
+## Modules
+
+| Name                                                               |                                     |
+|--------------------------------------------------------------------|-------------------------------------|
+| [api-wiser-archetype](api-wiser-archetype)                         | API Wiser Maven Archetype           | 
+| [api-wiser-core](api-wiser-core)                                   | Core module                         |
+| [api-wiser-http-client-templates](api-wiser-http-client-templates) | Java HTTP Client Template           |
+| [api-wiser-javapoet](api-wiser-javapoet)                           | Java Poet Type Reference resolution |
+| [api-wiser-maven-plugin](api-wiser-maven-plugin)                   | API Wiser Maven Plugin              |
+| [api-wiser-maven-templates](api-wiser-maven-templates)             | Maven Core Module Templates         |
+| [api-wiser-spring-app-templates](api-wiser-spring-app-templates)   | Spring App Module Template          |
+| [api-wiser-template-api](api-wiser-template-api)                   | API Wiser Template API              |
+
+
 
 ## Issues
 * Instead of jackson-annotations dependency it must be jackson-databind for `model` module.
@@ -42,3 +56,4 @@ https://github.com/fern-api/fern-java
 * [Wiser](https://github.com/voodoodyne/subethasmtp/blob/master/Wiser.md) - to unit test email sending code
 
 ## References
+* [Another API generator](https://github.com/fern-api/fern)

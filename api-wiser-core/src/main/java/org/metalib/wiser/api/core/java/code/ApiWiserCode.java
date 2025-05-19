@@ -1,50 +1,90 @@
 package org.metalib.wiser.api.core.java.code;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MODULES;
-import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_TARGET_FILE;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Singular;
-import org.metalib.wiser.api.template.ApiWiserTemplates;
-import org.openapitools.codegen.ClientOptInput;
-import org.openapitools.codegen.DefaultGenerator;
-import org.openapitools.codegen.Generator;
-import org.openapitools.codegen.TemplateManager;
-import org.openapitools.codegen.api.TemplatePathLocator;
-import org.openapitools.codegen.config.CodegenConfigurator;
-import org.openapitools.codegen.templating.CommonTemplateContentLocator;
-import org.openapitools.codegen.templating.GeneratorTemplateContentLocator;
-import org.openapitools.codegen.templating.TemplateManagerOptions;
 
+/**
+ * A builder class for creating and configuring {@link ApiWiserGenerator} instances.
+ * This class provides a fluent interface for setting various configuration options
+ * for code generation from OpenAPI specifications.
+ */
 @AllArgsConstructor(access = PRIVATE)
 @Builder
 public class ApiWiserCode {
 
+    /**
+     * Flag indicating whether to perform a dry run (no files will be written).
+     */
     boolean dry;
+
+    /**
+     * The base package name for generated code.
+     */
     String packageName;
+
+    /**
+     * The package name for generated API interfaces.
+     */
     String apiPackageName;
+
+    /**
+     * The package name for generated client classes.
+     */
     String clientPackageName;
+
+    /**
+     * The package name for generated server classes.
+     */
     String serverPackageName;
+
+    /**
+     * The package name for generated model classes.
+     */
     String modelPackageName;
+
+    /**
+     * The output directory where generated files will be written.
+     */
     File outputDir;
+
+    /**
+     * The input OpenAPI specification file.
+     */
     File inputSpec;
+
+    /**
+     * The Maven group ID for generated projects.
+     */
     String mavenGroupId;
+
+    /**
+     * The Maven artifact ID for generated projects.
+     */
     String mavenArtifactId;
+
+    /**
+     * The Maven version for generated projects.
+     */
     String mavenVersion;
 
+    /**
+     * Additional properties to be passed to the generator.
+     */
     @Singular
     final Map<String, Object> additionalProperties;
 
+    /**
+     * Creates and returns a new {@link ApiWiserGenerator} instance configured with
+     * the properties set in this builder.
+     *
+     * @return A new ApiWiserGenerator instance
+     */
     public ApiWiserGenerator generator() {
         return new ApiWiserGenerator(
                 dry,

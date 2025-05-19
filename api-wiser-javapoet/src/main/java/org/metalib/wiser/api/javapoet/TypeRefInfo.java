@@ -26,7 +26,12 @@ import static java.util.stream.Collectors.toList;
 @Accessors(fluent = true)
 public class TypeRefInfo {
 
-  static Map<String, TypeName> primitiveTypeName = Map.of(
+  /**
+   * java primitive types
+   * This map is used to resolve and refer to primitive types, including `void`
+   * within the context of the `TypeRefInfo` class.
+   */
+  static Map<String, TypeName> primitiveTypeNames = Map.of(
       "void", TypeName.VOID,
       "boolean", TypeName.BOOLEAN,
       "byte", TypeName.BYTE,
@@ -41,6 +46,12 @@ public class TypeRefInfo {
   List<TypeRefInfo> enclosedTypes;
   boolean isArray;
 
+  /**
+   * Parses a type string into a `TypeRefInfo` object. Supports generics and arrays.
+   * @param type java type
+   * @param imports import set
+   * @return TypeRefInfo instance
+   */
   public static TypeRefInfo parse(String type, Set<String> imports) {
     if (null == type || type.isBlank()) {
       return TypeRefInfo.builder().type("void").build();
@@ -67,11 +78,22 @@ public class TypeRefInfo {
         .build();
   }
 
+  /**
+   * Checks if a type exists in the provided imports and resolves it to its fully qualified name if necessary.
+   * @param type java type
+   * @param imports import set
+   * @return String
+   */
   static String importCheck(final String type, final Set<String> imports) {
     final var typeTail = '.' + type;
     return imports.stream().filter(v -> v.endsWith(typeTail)).findFirst().orElse(type);
   }
 
+  /**
+   * Parses a comma-separated list of types (e.g., `Map&lt;String, List&lt;Integer&gt;&gt;`) into individual type strings.
+   * @param typeList type list
+   * @return List&lt;String&gt; instance
+   */
   public static List<String> parseTypeList(String typeList) {
     // we don't parse comments although we most likely should.
     final var result = new ArrayList<String>();
@@ -108,6 +130,10 @@ public class TypeRefInfo {
     return result;
   }
 
+  /**
+   * Converts the `TypeRefInfo` object into a JavaPoet `TypeName` representation.
+   * @return TypeName instance
+   */
   public TypeName toTypeName() {
     final var typeBase = isArray ? type.substring(0, type.length() - 2) : type;
     final var typeParams = Optional.ofNullable(enclosedTypes).stream()
@@ -115,7 +141,7 @@ public class TypeRefInfo {
         .map(TypeRefInfo::toTypeName)
         .toArray(TypeName[]::new);
     final var classBase = Optional.of(typeBase)
-        .map(v -> primitiveTypeName.get(v))
+        .map(v -> primitiveTypeNames.get(v))
         .orElseGet(() -> ClassName.bestGuess(typeBase));
     final var resultBase = 0 == typeParams.length
         ? classBase
@@ -123,6 +149,10 @@ public class TypeRefInfo {
     return isArray ? ArrayTypeName.of(resultBase) : resultBase;
   }
 
+  /**
+   * Represents an exception thrown during the parsing or handling of type references
+   * within the TypeRefInfo class.
+   */
   public static class TypeRefInfoException extends RuntimeException {
     TypeRefInfoException(String message) {
       super(message);

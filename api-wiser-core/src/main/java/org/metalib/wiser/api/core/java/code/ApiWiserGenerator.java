@@ -23,6 +23,18 @@ import java.util.stream.Collectors;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MODULES;
 import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_TARGET_FILE;
 
+/**
+ * A code generator for the API Wiser system that extends the OpenAPI Tools DefaultGenerator.
+ * This class is responsible for generating code from OpenAPI specifications based on the
+ * configuration provided by {@link ApiWiserCodegen}.
+ * 
+ * The generator customizes the template processing to:
+ * - Filter templates based on specified modules
+ * - Customize the template processor to handle API Wiser specific requirements
+ * - Provide access to the underlying configuration and bundle
+ * 
+ * It is typically created using the {@link ApiWiserCode#generator()} method.
+ */
 public class ApiWiserGenerator extends DefaultGenerator {
 
     public ApiWiserGenerator(boolean dryRun,

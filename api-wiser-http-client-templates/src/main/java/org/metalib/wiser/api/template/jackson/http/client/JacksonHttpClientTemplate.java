@@ -45,31 +45,71 @@ import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClie
 import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClientTemplateBuilder.HTTP;
 import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClientTemplateBuilder.MODULE_NAME;
 
+/**
+ * Template service for generating a Jackson-based HTTP client.
+ * 
+ * <p>This template generates a Java HTTP client implementation that uses Jackson for JSON
+ * serialization/deserialization. The generated client uses Java's HttpClient to make HTTP
+ * requests and handles different HTTP methods (GET, POST, PUT, PATCH, DELETE).</p>
+ * 
+ * <p>The client processes path parameters, query parameters, and request bodies, and handles
+ * response deserialization using Jackson. It also includes error handling for HTTP status
+ * codes and exceptions.</p>
+ */
 public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
 
+    /** The name of this template */
     public static final String TEMPLATE_NAME = "jackson-http-client";
+
+    /** The unique identifier for this template */
     public static final String TEMPLATE_ID = API_WISER + DOUBLE_COLON + TEMPLATE_NAME;
 
+    /**
+     * Returns the unique identifier for this template.
+     * 
+     * @return the template ID
+     */
     @Override
     public String id() {
         return TEMPLATE_ID;
     }
 
+    /**
+     * Returns the name of the module this template belongs to.
+     * 
+     * @return the module name
+     */
     @Override
     public String moduleName() {
         return MODULE_NAME;
     }
 
+    /**
+     * Indicates that this template generates an API file rather than a supporting file.
+     * 
+     * @return true as this is an API template
+     */
     @Override
     public boolean isApiFile() {
         return true;
     }
 
+    /**
+     * Returns the file extension for the generated file.
+     * 
+     * @return "java" as the file extension
+     */
     @Override
     public String fileExtension() {
         return JAVA;
     }
 
+    /**
+     * Defines the target file location for the generated HTTP client class.
+     * 
+     * @param config the API Wiser configuration
+     * @return the target file information
+     */
     @Override
     public ApiWiserTargetFile targetFile(ApiWiserConfig config) {
         return new ApiWiserTargetFile() {
@@ -91,6 +131,12 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
         };
     }
 
+    /**
+     * Generates the Java code for the HTTP client class.
+     * 
+     * @param bundle the API Wiser bundle containing configuration and context
+     * @return the generated Java code
+     */
     @Override
     public String toText(ApiWiserBundle bundle) {
         final var httpClientPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
@@ -98,6 +144,16 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .build().toString();
     }
 
+    /**
+     * Builds the TypeSpec for the HTTP client class.
+     * 
+     * <p>This method creates a Java class that implements the API interface and provides
+     * HTTP client implementations for all API operations. The client uses Java's HttpClient
+     * and Jackson for JSON processing.</p>
+     * 
+     * @param bundle the API Wiser bundle containing configuration and context
+     * @return the TypeSpec builder for the HTTP client class
+     */
     static TypeSpec.Builder httpClientTypeBuilder(ApiWiserBundle bundle) {
         final var operations = bundle.codeOperation();
         final var className = bundle.camelizeBaseName() + LOWER_HYPHEN.to(UPPER_CAMEL, HTTP + DASH + CLIENT);
@@ -133,6 +189,17 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
         return classBuilder;
     }
 
+    /**
+     * Creates a method specification for an API operation.
+     * 
+     * <p>This method generates the Java code for a single API operation method in the HTTP client.
+     * It handles the method parameters, return type, and imports required for the operation.</p>
+     * 
+     * @param operation the API operation to generate a method for
+     * @param commonPath the common base path for all API operations
+     * @param imports the set of imports to be extended with any additional imports needed
+     * @return the method specification for the API operation
+     */
     private static MethodSpec apiMethodSpec(ApiWiserBundle.CodeOperation.Op operation, String commonPath, Set<String> imports) {
         final var extendedImports = new HashSet<>(imports);
         final var operationOpt = Optional.of(operation);
@@ -174,6 +241,16 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .build();
     }
 
+    /**
+     * Generates the method body for an API operation.
+     * 
+     * <p>This method creates the code block that implements the HTTP request logic for an API operation.
+     * It handles URL building, query parameters, path parameters, request body, and HTTP method.</p>
+     * 
+     * @param commonPath the common base path for all API operations
+     * @param operationOpt the optional API operation to generate a method body for
+     * @return the code block for the method body
+     */
     static CodeBlock methodBody(String commonPath, Optional<ApiWiserBundle.CodeOperation.Op> operationOpt) {
         final var result = CodeBlock.builder()
                 .beginControlFlow("try")
@@ -246,6 +323,15 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
         return result.build();
     }
 
+    /**
+     * Generates the HTTP response handling code.
+     * 
+     * <p>This method creates the code block that handles the HTTP response processing.
+     * It includes logic for handling different HTTP status codes and deserializing the response body.</p>
+     * 
+     * @param operationOpt the optional API operation to generate response handling for
+     * @return the code block for HTTP response handling
+     */
     static CodeBlock httpSendCases(Optional<ApiWiserBundle.CodeOperation.Op> operationOpt) {
         final var operationId = operationOpt.map(ApiWiserBundle.CodeOperation.Op::operationId).orElse("");
         final var returnType = operationOpt.map(ApiWiserBundle.CodeOperation.Op::returnType).orElse("Void");
@@ -286,6 +372,15 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
         return builder.build();
     }
 
+    /**
+     * Generates the HTTP result processing code.
+     * 
+     * <p>This method creates the code block that processes the HTTP response result.
+     * It includes logic for handling different HTTP status codes and returning the appropriate result.</p>
+     * 
+     * @param operationOpt the optional API operation to generate result processing for
+     * @return the code block for HTTP result processing
+     */
     static CodeBlock httpResultCases(Optional<ApiWiserBundle.CodeOperation.Op> operationOpt) {
         final var returnType = operationOpt.map(ApiWiserBundle.CodeOperation.Op::returnType).orElse(null);
         final var builder = CodeBlock.builder()
@@ -297,9 +392,17 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
         return builder.endControlFlow().build();
     }
 
+    /**
+     * Creates a parameter specification for an API operation parameter.
+     * 
+     * <p>This method generates the Java code for a method parameter in the HTTP client.</p>
+     * 
+     * @param parameter the API parameter to generate a specification for
+     * @param extendedImports the set of imports to be extended with any additional imports needed
+     * @return the parameter specification
+     */
     static ParameterSpec factualParameter(ApiWiserBundle.CodeParameter parameter, Set<String> extendedImports) {
         final var result = ParameterSpec.builder(TypeRefInfo.parse(parameter.dataType(), extendedImports).toTypeName(), parameter.name());
         return result.build();
     }
-
 }
