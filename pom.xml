@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -11,7 +10,7 @@
 
     <groupId>org.metalib.api.wiser</groupId>
     <artifactId>api-wiser</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -39,27 +38,27 @@
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-template-api</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-javapoet</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-maven-templates</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-http-client-templates</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-spring-app-templates</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
@@ -164,6 +163,6 @@
         <connection>scm:git:git://github.com/org-metalib/api-wiser.git</connection>
         <developerConnection>scm:git:https://github.com/org-metalib/api-wiser.git</developerConnection>
         <url>https://github.com/org-metalib/api-wiser</url>
-        <tag>HEAD</tag>
+        <tag>v0.0.1</tag>
     </scm>
 </project>
