@@ -31,10 +31,10 @@ import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClie
  * either a typed body (deserialized from JSON) or raw text content. The wrapper is used
  * by the HTTP client to handle API responses in a consistent way.</p>
  */
-public class ResponseWrapperTemplate implements ApiWiserTemplateService {
+public class HttpClientDefaultExceptionTemplate implements ApiWiserTemplateService {
 
     /** The name of this template */
-    public static final String TEMPLATE_NAME = "response-wrapper";
+    public static final String TEMPLATE_NAME = "http-client-default-exception";
 
     /** The unique identifier for this template */
     public static final String TEMPLATE_ID = "api-wiser::" + TEMPLATE_NAME;
@@ -115,39 +115,21 @@ public class ResponseWrapperTemplate implements ApiWiserTemplateService {
     @Override
     public String toText(ApiWiserBundle bundle) {
         final var jacksonBodyHandlerPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
-        return JavaFile.builder(jacksonBodyHandlerPackage, genericResponseTypeBuilder().build())
+        return JavaFile.builder(jacksonBodyHandlerPackage, httpDefaultExceptionTypeBuilder().build())
                 .build().toString();
     }
 
-    /**
-     * Builds the TypeSpec for the ResponseWrapper class.
-     * 
-     * <p>The ResponseWrapper is a generic class that can hold either a typed body (deserialized from JSON)
-     * or raw text content. It has two constructors: one for typed bodies and one for raw byte content.</p>
-     * 
-     * <p>Based on: https://stackoverflow.com/questions/57629401/deserializing-json-using-java-11-httpclient-and-custom-bodyhandler-with-jackson</p>
-     * 
-     * @return the TypeSpec builder for the ResponseWrapper class
-     */
-    static TypeSpec.Builder genericResponseTypeBuilder() {
-        final var typeVariableW = TypeVariableName.get("T");
-        final var className =LOWER_HYPHEN.to(UPPER_CAMEL, TEMPLATE_NAME);
+    static TypeSpec.Builder httpDefaultExceptionTypeBuilder() {
+        final var className = LOWER_HYPHEN.to(UPPER_CAMEL, TEMPLATE_NAME);
         return TypeSpec
                 .classBuilder(className)
+                .superclass(TypeVariableName.get("RuntimeException"))
                 .addModifiers(Modifier.PUBLIC)
-                .addTypeVariable(typeVariableW)
-                .addAnnotation(Getter.class)
-                .addField(typeVariableW, "body", Modifier.PRIVATE)
-                .addField(String.class, "text", Modifier.PRIVATE)
                 .addMethod(MethodSpec
                         .constructorBuilder()
-                        .addParameter(ParameterSpec.builder(typeVariableW, "body").build())
-                        .addCode(CodeBlock.builder().addStatement("this.body = body").build())
-                        .build())
-                .addMethod(MethodSpec
-                        .constructorBuilder()
-                        .addParameter(ParameterSpec.builder(byte[].class, "content").build())
-                        .addCode(CodeBlock.builder().addStatement("this.text = new String(content)").build())
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(ParameterSpec.builder(String.class, "message").build())
+                        .addCode(CodeBlock.builder().addStatement("super(message)").build())
                         .build())
                 ;
     }

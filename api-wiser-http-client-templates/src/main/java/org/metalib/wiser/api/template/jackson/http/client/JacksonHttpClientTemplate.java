@@ -271,7 +271,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .map(ApiWiserBundle.CodeOperation.Op::allParams)
                 .flatMap(Collection::stream)
                 .filter(ApiWiserBundle.CodeParameter::isPathParam)
-                .collect(Collectors.toList());
+                .toList();
         String urlBuildExpr;
         if (pathParams.isEmpty()) {
             urlBuildExpr = ".build()";
@@ -286,7 +286,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .map(ApiWiserBundle.CodeOperation.Op::allParams)
                 .flatMap(Collection::stream)
                 .filter(ApiWiserBundle.CodeParameter::isBodyParam)
-                .collect(Collectors.toList());
+                .toList();
         final var requestBodyExprBuilder = CodeBlock.builder();
         if (bodyParams.isEmpty()) {
             if (Set.of("POST", "PUT", "PATCH").contains(httpMethod)) {
@@ -317,7 +317,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .addStatement("throw new $T(e$$)", UncheckedIOException.class)
                 .nextControlFlow("catch($T e$$)", InterruptedException.class)
                 .addStatement("$T.currentThread().interrupt()", Thread.class)
-                .addStatement("throw new $T(e$$)", RuntimeException.class)
+                .addStatement("throw new HttpClientInterruptedException(e$$)")
                 .endControlFlow()
                 ;
         return result.build();
@@ -340,17 +340,17 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .beginControlFlow("if (!(null == preResponseHandler$$ || preResponseHandler$$.apply($S, info$$)))", operationId)
                 .add("return $T.mapping($T.ofInputStream(), inputStream$$ -> \n", HttpResponse.BodySubscribers.class, HttpResponse.BodySubscribers.class)
                 .indent()
-                .add("() -> new ResponseWrapper<>(new byte[]{}));\n")
+                .add("() -> new HttpClientResponseWrapper<>(new byte[]{}));\n")
                 .unindent()
                 .endControlFlow()
                 .beginControlFlow("if (200 == info$$.statusCode())")
                 .add("return $T.mapping($T.ofInputStream(), inputStream$$ -> \n", HttpResponse.BodySubscribers.class, HttpResponse.BodySubscribers.class)
                 .indent()
-                .add("($T<ResponseWrapper<$L>>) () -> {\n", Supplier.class, returnType)
+                .add("($T<HttpClientResponseWrapper<$L>>) () -> {\n", Supplier.class, returnType)
                 .indent()
                 .add("try(final var stream$$ = inputStream$$) {\n")
                 .indent()
-                .add("return new ResponseWrapper<>(jackson$$.readValue(stream$$, new $T<$L>() {}));\n", TypeReference.class, returnType)
+                .add("return new HttpClientResponseWrapper<>(jackson$$.readValue(stream$$, new $T<$L>() {}));\n", TypeReference.class, returnType)
                 .unindent()
                 .add("} catch(IOException e) {\n")
                 .indent()
@@ -363,7 +363,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .nextControlFlow("else")
                 .add("return $T.mapping($T.ofByteArray(), content$$ ->\n", HttpResponse.BodySubscribers.class, HttpResponse.BodySubscribers.class)
                 .indent()
-                .add("() -> new ResponseWrapper<>(content$$) );\n")
+                .add("() -> new HttpClientResponseWrapper<>(content$$) );\n")
                 .unindent()
                 .endControlFlow()
                 .endControlFlow()
@@ -386,7 +386,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
         final var builder = CodeBlock.builder()
                 .beginControlFlow("switch(response$$.statusCode())")
                 .add("case 200: $L;\n", null == returnType ? "break" : "return response$.body().get().getBody()")
-                .add("default: throw new RuntimeException(\"Http Status: \" + response$$.statusCode() + \" - \" + response$$.body().get().getText());\n")
+                .add("default: throw new HttpClientDefaultException(\"Http Status: \" + response$$.statusCode() + \" - \" + response$$.body().get().getText());\n")
                 ;
 
         return builder.endControlFlow().build();

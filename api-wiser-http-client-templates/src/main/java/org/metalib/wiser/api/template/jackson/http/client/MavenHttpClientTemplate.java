@@ -125,7 +125,8 @@ public class MavenHttpClientTemplate implements ApiWiserTemplateService {
                 .property(ApiWiserFinals.moduleNameProperty(), moduleName())
                 .dependencies(stream(moduleDependencies())
                         .map(v -> toDependency(bundle, v))
-                        .collect(toList()).toArray(Dependency[]::new))
+                        .toList().toArray(Dependency[]::new))
+                .dependency("com.fasterxml.jackson.core", "jackson-databind")
                 .dependency("org.metalib.net.url", "jersey-url-builder")
                 .dependency("org.junit.jupiter", "junit-jupiter-engine", MavenScope.TEST)
                 .toXml();

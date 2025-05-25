@@ -1,7 +1,5 @@
 package org.metalib.wiser.api.template.maven;
 
-import io.fabric8.maven.Maven;
-import org.apache.maven.model.Model;
 import org.metalib.wiser.api.template.ApiWiserBundle;
 import org.metalib.wiser.api.template.ApiWiserConfig;
 import org.metalib.wiser.api.template.ApiWiserTargetFile;
@@ -12,7 +10,6 @@ import static org.metalib.wiser.api.template.ApiWiserFinals.API;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
 import static org.metalib.wiser.api.template.ApiWiserFinals.POM;
 import static org.metalib.wiser.api.template.ApiWiserFinals.XML;
-import static org.metalib.wiser.api.template.maven.MavenProjectHelper.X_API_WISER_MAVEN_MODEL;
 
 public class MavenApiPom implements ApiWiserTemplateService {
 

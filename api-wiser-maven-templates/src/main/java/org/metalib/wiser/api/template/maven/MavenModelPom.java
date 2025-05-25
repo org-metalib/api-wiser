@@ -3,13 +3,10 @@ package org.metalib.wiser.api.template.maven;
 import org.apache.maven.model.Model;
 import org.metalib.wiser.api.template.ApiWiserBundle;
 import org.metalib.wiser.api.template.ApiWiserConfig;
-import org.metalib.wiser.api.template.ApiWiserEvent;
 import org.metalib.wiser.api.template.ApiWiserTargetFile;
 import org.metalib.wiser.api.template.ApiWiserTemplateService;
 import org.metalib.wiser.api.template.maven.model.MavenModule;
 
-import static org.metalib.wiser.api.template.ApiWiserEvents.MAVEN_SYNC;
-import static org.metalib.wiser.api.template.ApiWiserFinals.API;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
 import static org.metalib.wiser.api.template.ApiWiserFinals.MODEL;
 import static org.metalib.wiser.api.template.ApiWiserFinals.POM;
