@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.metalib.api.wiser</groupId>
         <artifactId>api-wiser</artifactId>
-        <version>0.0.5-SNAPSHOT</version>
+        <version>0.0.5</version>
     </parent>
 
     <artifactId>api-wiser-javapoet</artifactId>
