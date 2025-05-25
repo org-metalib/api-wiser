@@ -75,4 +75,5 @@ public class Example {
 
 ## Integration with API Wiser
 
-This module is designed to work with the API Wiser framework. When generating code with API Wiser, these templates can be used to create HTTP client implementations for your API definitions.
+This module is designed to work with the API Wiser framework. When generating code with API Wiser, these templates can 
+be used to create HTTP client implementations for your API definitions.

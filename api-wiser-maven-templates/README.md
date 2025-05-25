@@ -1,6 +1,9 @@
-# Maven Project and Module pom.xml generator
+# Maven pom.xml templates
 
 ## Modules
+* Root
 * Model
 * API
 * Biz
+
+

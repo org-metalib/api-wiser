@@ -1,0 +1,3 @@
+org.metalib.wiser.api.template.spring.webclient.SpringFluxWebClientMavenTemplate
+org.metalib.wiser.api.template.spring.webclient.SpringFluxWebClientResponseWrapperTemplate
+org.metalib.wiser.api.template.spring.webclient.SpringFluxWebClientTemplate

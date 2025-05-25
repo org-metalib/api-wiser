@@ -2,7 +2,8 @@
 
 ## Overview
 
-API Wiser Template API is a module that provides interfaces and classes for working with templates and dependencies in the API Wiser system. This module defines the contract for template services and provides utility classes for handling Maven dependencies.
+API Wiser Template API is a module that provides interfaces and classes for working with templates and dependencies in the API Wiser system.
+This module defines the contract for template services and provides utility classes for handling Maven dependencies.
 
 ## Key Components
 

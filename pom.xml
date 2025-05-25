@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.metalib.maven.pom</groupId>
         <artifactId>metalib-spring-pom</artifactId>
-        <version>0.0.60</version>
+        <version>0.0.65</version>
     </parent>
 
     <groupId>org.metalib.api.wiser</groupId>
@@ -22,6 +22,7 @@
         <module>api-wiser-core</module>
         <module>api-wiser-maven-plugin</module>
         <module>api-wiser-archetype</module>
+        <module>api-wiser-spring-webclient-template</module>
     </modules>
 
     <properties>
