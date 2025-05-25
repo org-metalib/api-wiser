@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.metalib.api.wiser</groupId>
         <artifactId>api-wiser</artifactId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.4</version>
     </parent>
 
     <artifactId>api-wiser-http-client-templates</artifactId>
