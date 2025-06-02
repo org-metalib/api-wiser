@@ -7,17 +7,14 @@ import org.metalib.wiser.api.template.ApiWiserTemplates;
 import org.metalib.wiser.api.template.maven.MavenProjectHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
 import static org.metalib.wiser.api.template.ApiWiserFinals.POM;
 import static org.metalib.wiser.api.template.maven.MavenProjectHelper.DOT_VERSION;
@@ -65,15 +62,7 @@ public enum MavenModule {
             });
 
             // Modules
-            final var templateModules = new HashMap<String,Set<String>>();
-            ApiWiserTemplates.list()
-                    .stream()
-                    // we are filtering out modules that do not produce any artifacts
-                    // it may cause some frustration when a template provider forgot to turn on either of template
-                    // flags: isModelFile, isApiFile, or isSupportingFile
-                    .filter(v -> ApiWiserTemplates.anyModuleOutput(v.moduleName()))
-                    .forEach(v -> templateModules
-                            .computeIfAbsent(v.moduleName(), k -> new TreeSet<>()).addAll(asList(v.moduleDependencies())));
+            final var templateModules = ApiWiserTemplates.modules();
             return super.enrich(bundle)
                     .dependenciesManagements(projectDependencies.toArray(new Dependency[0]))
                     .properties(properties)
@@ -82,7 +71,7 @@ public enum MavenModule {
                             .filter(m -> !m.equals(ApiWiserFinals.ROOT))
                             .filter(m -> modules.isEmpty() || modules.contains(m))
                             .map(v -> bundle.artifactId() + DASH + v)
-                            .collect(toList())
+                            .toList()
                             .toArray(String[]::new));
         }
     },
@@ -112,7 +101,7 @@ public enum MavenModule {
         public PomModel enrich(ApiWiserBundle bundle) {
             return decorateAsModule(super.enrich(bundle))
                     .dependency(bundle.groupId(), bundle.artifactId() + DASH + BIZ.moduleName())
-                    .dependency(SPRING_BOOT_STARTER_TEST, MavenScope.TEST);
+                    .dependency(SPRING_BOOT_STARTER_TEST, MvnScope.TEST);
         }
     };
 
@@ -133,7 +122,7 @@ public enum MavenModule {
                 d.setScope("provided");
             }
             return d;
-        }).collect(toList());
+        }).toList();
     }
 
     public PomModel enrich(ApiWiserBundle bundle) {

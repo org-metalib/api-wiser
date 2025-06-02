@@ -35,7 +35,12 @@ import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_OPE
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_PROJECT_BUILD_DIR;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_PROJECT_DIR;
 import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_API_PACKAGE;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_BASE_ENTITY_NAME;
 import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_CONTEXT;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_GENERATED_RESOURCE_FOLDER;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_GENERATED_SOURCE_FOLDER;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_SOURCE_FOLDER;
 import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_TARGET_FILE;
 import static org.openapitools.codegen.utils.StringUtils.camelize;
 
@@ -229,6 +234,32 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
     }
 
     @Override
+    public String sourceFolder() {
+        return bundleOpt.map(v -> v.get(X_API_WISER_SOURCE_FOLDER).toString()).orElse(null);
+    }
+
+    @Override
+    public String generatedSourceFolder() {
+        return bundleOpt.map(v -> v.get(X_API_WISER_GENERATED_SOURCE_FOLDER).toString()).orElse(null);
+    }
+
+    @Override
+    public String generatedResourceFolder() {
+        return bundleOpt.map(v -> v.get(X_API_WISER_GENERATED_RESOURCE_FOLDER).toString()).orElse(null);
+    }
+
+    @Override
+    public String apiPackage() {
+        return bundleOpt.map(v -> v.get(X_API_WISER_API_PACKAGE).toString()).orElse(null);
+    }
+
+    @Override
+    public String baseEntityName() {
+        return bundleOpt.map(v -> v.get(X_API_WISER_BASE_ENTITY_NAME).toString()).orElse(null);
+    }
+
+
+    @Override
     public String module() {
         return bundleOpt.map(v -> (String) v.get(X_API_WISER_MODULE)).orElse("");
     }
@@ -345,7 +376,7 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
             public List<CodeProperty> vars() {
                 return source.getVars().stream()
                         .map(ApiWiserBundleModel::toCodeProperty)
-                        .collect(toList());
+                        .toList();
             }
 
             @Override
@@ -360,7 +391,7 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
                         .stream()
                         .flatMap(Collection::stream)
                         .map(ApiWiserBundleModel::toCodeModel)
-                        .collect(toList());
+                        .toList();
             }
         };
     }
@@ -373,6 +404,16 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
             @Override
             public String containerType() {
                 return property.getContainerType();
+            }
+
+            @Override
+            public String baseType() {
+                return property.getBaseType();
+            }
+
+            @Override
+            public String complexType() {
+                return property.getComplexType();
             }
 
             @Override
@@ -496,7 +537,7 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
                                 .map(vvv -> vvv.consumes)
                                 .stream()
                                 .flatMap(Collection::stream)
-                                .map(vvv -> (MediaType) () -> vvv.get("mediaType")).collect(toList());
+                                .map(vvv -> (MediaType) () -> vvv.get("mediaType")).toList();
                     }
 
                     @Override
@@ -505,7 +546,7 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
                                 .map(vvv -> vvv.produces)
                                 .stream()
                                 .flatMap(Collection::stream)
-                                .map(vvv -> (MediaType) () -> vvv.get("mediaType")).collect(toList());
+                                .map(vvv -> (MediaType) () -> vvv.get("mediaType")).toList();
                     }
 
                     @Override
@@ -578,8 +619,7 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
                             }
                         }).collect(toList());
                     }
-                })
-                        .collect(toList());
+                }).toList();
                 final var m = new HashMap<String, List<Op>>();
                 operations.forEach(o -> m.computeIfAbsent(o.operationId(), k -> new ArrayList<>()).add(o));
                 return m.keySet().stream().flatMap(k -> {
@@ -592,7 +632,7 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
                             op.allParams().stream().map(CodeParameter::name).collect(joining("|")),
                             kk -> op));
                     return opsMap.values().stream();
-                }).collect(toList());
+                }).toList();
             }
         });
     }

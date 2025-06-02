@@ -1,6 +1,6 @@
 package org.metalib.wiser.api.template.biz;
 
-import com.squareup.javapoet.JavaFile;
+import com.palantir.javapoet.JavaFile;
 import org.metalib.wiser.api.template.ApiWiserBundle;
 import org.metalib.wiser.api.template.ApiWiserConfig;
 import org.metalib.wiser.api.template.ApiWiserTargetFile;

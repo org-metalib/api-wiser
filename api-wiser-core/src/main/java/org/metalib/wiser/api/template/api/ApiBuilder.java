@@ -1,8 +1,8 @@
 package org.metalib.wiser.api.template.api;
 
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.ParameterSpec;
+import com.palantir.javapoet.TypeSpec;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.metalib.wiser.api.template.ApiWiserBundle;

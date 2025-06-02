@@ -31,9 +31,15 @@ public interface ApiWiserBundle {
     String module();
     List<MavenDependency<?>> moduleDependencies();
     File projectDir();
+    File projectBuildDir();
+
     File targetFile();
 
-    File projectBuildDir();
+    String sourceFolder();
+    String generatedSourceFolder();
+    String generatedResourceFolder();
+    String apiPackage();
+    String baseEntityName();
 
     Optional<CodeModel> codeModel();
     Optional<CodeOperation> codeOperation();
@@ -90,6 +96,8 @@ public interface ApiWiserBundle {
     }
     interface CodeProperty {
         String containerType();
+        String baseType();
+        String complexType();
         String dataType();
         String datatypeWithEnum();
         String baseName();

@@ -6,7 +6,7 @@ The API Wiser Maven Plugin is a tool for initializing and managing API Wiser pro
 
 - Convert single-module Maven projects to multi-module projects
 - Generate code based on API specifications
-- Configure Maven project properties and dependencies
+- Configure Maven project properties and mavenDependencies
 
 ## Goals
 

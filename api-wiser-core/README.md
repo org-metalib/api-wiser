@@ -33,7 +33,7 @@ a flexible and customizable code generation framework.
   It provides methods to convert maps to specific API Wiser model objects.
 
 * `ApiWiserContext` - Represents a context for API Wiser operations.
-  It holds information about Maven dependencies organized by category.
+  It holds information about Maven mavenDependencies organized by category.
 
 * `ApiWiserPath` - Represents a path in the API Wiser system with context information for different modules.
   It contains a map of module contexts where each context has imports and properties.

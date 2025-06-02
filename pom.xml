@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.metalib.maven.pom</groupId>
         <artifactId>metalib-spring-pom</artifactId>
-        <version>0.0.69</version>
+        <version>0.0.70</version>
     </parent>
 
     <groupId>org.metalib.api.wiser</groupId>

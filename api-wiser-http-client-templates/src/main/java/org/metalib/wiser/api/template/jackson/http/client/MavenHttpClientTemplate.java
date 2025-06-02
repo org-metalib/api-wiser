@@ -6,11 +6,10 @@ import org.metalib.wiser.api.template.ApiWiserConfig;
 import org.metalib.wiser.api.template.ApiWiserFinals;
 import org.metalib.wiser.api.template.ApiWiserTargetFile;
 import org.metalib.wiser.api.template.ApiWiserTemplateService;
-import org.metalib.wiser.api.template.maven.model.MavenScope;
+import org.metalib.wiser.api.template.maven.model.MvnScope;
 import org.metalib.wiser.api.template.maven.model.PomModel;
 
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
 import static org.metalib.wiser.api.template.ApiWiserFinals.API;
 import static org.metalib.wiser.api.template.ApiWiserFinals.API_WISER;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
@@ -128,7 +127,7 @@ public class MavenHttpClientTemplate implements ApiWiserTemplateService {
                         .toList().toArray(Dependency[]::new))
                 .dependency("com.fasterxml.jackson.core", "jackson-databind")
                 .dependency("org.metalib.net.url", "jersey-url-builder")
-                .dependency("org.junit.jupiter", "junit-jupiter-engine", MavenScope.TEST)
+                .dependency("org.junit.jupiter", "junit-jupiter-engine", MvnScope.TEST)
                 .toXml();
     }
 

@@ -80,11 +80,11 @@ public class PomModel {
         return dependency(coordinate.getGroupId(), coordinate.getArtifactId(), null);
     }
 
-    public PomModel dependency(MavenDependency coordinate, MavenScope scope) {
+    public PomModel dependency(MavenDependency coordinate, MvnScope scope) {
         return dependency(coordinate.getGroupId(), coordinate.getArtifactId(), scope);
     }
 
-    public PomModel dependency(String groupId, String artifactId, MavenScope scope) {
+    public PomModel dependency(String groupId, String artifactId, MvnScope scope) {
         final var dependency = new Dependency();
         dependency.setGroupId(groupId);
         dependency.setArtifactId(artifactId);

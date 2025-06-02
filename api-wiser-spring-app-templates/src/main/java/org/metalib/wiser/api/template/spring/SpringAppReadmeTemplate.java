@@ -9,12 +9,16 @@ import org.metalib.wiser.api.template.ApiWiserTemplateService;
 import java.io.File;
 
 import static org.metalib.wiser.api.template.ApiWiserFinals.JAVA;
+import static org.metalib.wiser.api.template.ApiWiserFinals.MD;
+import static org.metalib.wiser.api.template.ApiWiserFinals.README;
+import static org.metalib.wiser.api.template.spring.SpringAppMavenTemplate.TEMPLATE_NAME;
+import static org.metalib.wiser.api.template.spring.SpringTemplateBuilder.DASH;
+import static org.metalib.wiser.api.template.spring.SpringTemplateBuilder.MODULE_NAME;
 import static org.metalib.wiser.api.template.spring.SpringTemplateBuilder.createSpringAppClassBuilder;
 
-public class SpringAppTemplate implements ApiWiserTemplateService {
+public class SpringAppReadmeTemplate implements ApiWiserTemplateService {
 
-    public static final String TEMPLATE_NAME = "spring-app";
-    public static final String TEMPLATE_ID = "api-wiser::" + TEMPLATE_NAME;
+    public static final String TEMPLATE_ID = "api-wiser::" + TEMPLATE_NAME + DASH + README;
 
     @Override
     public String id() {
@@ -23,12 +27,12 @@ public class SpringAppTemplate implements ApiWiserTemplateService {
 
     @Override
     public String moduleName() {
-        return TEMPLATE_NAME;
+        return MODULE_NAME;
     }
 
     @Override
     public String fileExtension() {
-        return JAVA;
+        return MD;
     }
 
     @Override
@@ -41,25 +45,27 @@ public class SpringAppTemplate implements ApiWiserTemplateService {
         return new ApiWiserTargetFile() {
             @Override
             public String relativeFolder() {
-                return config.mavenArtifactId()
-                        + "-"
-                        + TEMPLATE_NAME
-                        + File.separator
-                        + config.generatedSourceFolder()
-                        + File.separator
-                        + config.basePackage().replace(".", File.separator);
+                return config.mavenArtifactId() + DASH + MODULE_NAME;
             }
 
             @Override
             public String fileName() {
-                return "SpringApp";
+                return README;
             }
         };
     }
 
     @Override
     public String toText(ApiWiserBundle bundle) {
-        final var springAppPackage = bundle.basePackage();
-        return JavaFile.builder(springAppPackage, createSpringAppClassBuilder(bundle).build()).build().toString();
+        return bundle.targetFile().exists()
+                ? null // // do not overwrite existing file
+                : """
+                  # Spring Boot App
+                  
+                  Start Spring Boot Application locally
+                  ```shell
+                  mvn spring-boot:run
+                  ```
+                  """;
     }
 }

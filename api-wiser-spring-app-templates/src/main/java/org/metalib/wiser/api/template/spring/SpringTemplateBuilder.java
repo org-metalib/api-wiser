@@ -1,12 +1,12 @@
 package org.metalib.wiser.api.template.spring;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.AnnotationSpec.Builder;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.AnnotationSpec;
+import com.palantir.javapoet.AnnotationSpec.Builder;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.ParameterSpec;
+import com.palantir.javapoet.TypeSpec;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.metalib.wiser.api.template.ApiWiserBundle;
@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
@@ -40,7 +39,7 @@ import static org.springframework.util.StringUtils.capitalize;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpringTemplateBuilder {
 
-  public static String MODULE_NAME = "spring-app";
+  public static final String MODULE_NAME = "spring-app";
 
   public static final String SPRING_APP = "SpringApp";
   public static final String CONTROLLER = "controller";
@@ -168,7 +167,7 @@ public class SpringTemplateBuilder {
         .stream()
         .flatMap(Collection::stream)
         .map(ApiWiserBundle.MediaType::name)
-        .collect(Collectors.toList());
+        .toList();
     if (!consumes.isEmpty()) {
       builder.addMember("consumes", "$L", consumes
           .stream()
@@ -180,7 +179,7 @@ public class SpringTemplateBuilder {
         .stream()
         .flatMap(Collection::stream)
         .map(ApiWiserBundle.MediaType::name)
-        .collect(Collectors.toList());
+        .toList();
     if (!produces.isEmpty()) {
       builder.addMember("produces", "$L", produces.stream()
           .map(v -> CodeBlock.of("$S", v))

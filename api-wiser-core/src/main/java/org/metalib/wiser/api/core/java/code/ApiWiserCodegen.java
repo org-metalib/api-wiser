@@ -144,7 +144,7 @@ public class ApiWiserCodegen extends AbstractJavaCodegen implements ApiWiserConf
                 .filter(v -> modules.isEmpty() || modules.contains(v.moduleName()))
                 .map(this::toSupportingFile)
                 .filter(Objects::nonNull)
-                .collect(toList()));
+                .toList());
         return objs;
     }
 

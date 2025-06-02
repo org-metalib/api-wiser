@@ -1,9 +1,9 @@
 package org.metalib.wiser.api.javapoet;
 
-import com.squareup.javapoet.ArrayTypeName;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
+import com.palantir.javapoet.ArrayTypeName;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.ParameterizedTypeName;
+import com.palantir.javapoet.TypeName;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -74,7 +74,7 @@ public class TypeRefInfo {
         .enclosedTypes(parseTypeList(type.substring(index+1, rindex))
             .stream()
             .map(v -> parse(v, imports))
-            .collect(toList()))
+            .toList())
         .build();
   }
 

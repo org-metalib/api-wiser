@@ -21,6 +21,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MODULES;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_API_PACKAGE;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_BASE_ENTITY_NAME;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_GENERATED_RESOURCE_FOLDER;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_GENERATED_SOURCE_FOLDER;
+import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_SOURCE_FOLDER;
 import static org.metalib.wiser.api.template.ApiWiserFinals.X_API_WISER_TARGET_FILE;
 
 /**
@@ -92,6 +97,11 @@ public class ApiWiserGenerator extends DefaultGenerator {
                 new TemplatePathLocator[]{generatorTemplateLocator, commonTemplateLocator}) {
             @Override
             public File write(Map<String, Object> data, String template, File target) throws IOException {
+                data.put(X_API_WISER_GENERATED_RESOURCE_FOLDER, ApiWiserGenerator.this.config().generatedResourceFolder());
+                data.put(X_API_WISER_SOURCE_FOLDER, ApiWiserGenerator.this.config().sourceFolder());
+                data.put(X_API_WISER_GENERATED_SOURCE_FOLDER, ApiWiserGenerator.this.config().generatedSourceFolder());
+                data.put(X_API_WISER_API_PACKAGE, ApiWiserGenerator.this.config().apiPackage());
+                data.put(X_API_WISER_BASE_ENTITY_NAME, ApiWiserGenerator.this.config().baseEntityName());
                 data.put(X_API_WISER_TARGET_FILE, target);
                 String templateContent = templateEngine.compileTemplate(this, data, template);
                 return null == templateContent ? null : writeToFile(target.getPath(), templateContent);

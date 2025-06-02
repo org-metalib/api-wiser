@@ -8,7 +8,6 @@ import org.metalib.wiser.api.template.ApiWiserMavenDependency;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Utility class for creating and manipulating API Wiser model objects.
@@ -48,10 +47,7 @@ public class ApiWiserModel {
                 if (null == dependencies) {
                     continue;
                 }
-                final var a = dependencies.stream()
-                        .map(ApiWiserMavenDependency::parse)
-                        .collect(Collectors.toList());
-                dependencyMap.put(entry.getKey(), a);
+                dependencyMap.put(entry.getKey(), dependencies.stream().map(ApiWiserMavenDependency::parse).toList());
             }
             result.dependencies(dependencyMap);
         } else {

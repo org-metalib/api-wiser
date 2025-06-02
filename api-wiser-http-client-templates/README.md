@@ -25,7 +25,7 @@ The templates in this module generate:
 
 ### Maven Integration
 - Generates Maven POM files for the HTTP client module
-- Sets up proper dependencies and parent project relationships
+- Sets up proper mavenDependencies and parent project relationships
 - Configures the module with necessary libraries
 
 ## Template Classes
@@ -37,7 +37,7 @@ Generates a Java HTTP client implementation that uses Jackson for JSON processin
 Generates a generic wrapper class for HTTP responses that can hold either a typed body (deserialized from JSON) or raw text content.
 
 ### MavenHttpClientTemplate
-Generates a Maven POM file that configures the HTTP client module with the necessary dependencies and parent project relationship.
+Generates a Maven POM file that configures the HTTP client module with the necessary mavenDependencies and parent project relationship.
 
 ## Example Usage
 

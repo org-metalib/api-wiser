@@ -2,11 +2,16 @@ package org.metalib.wiser.api.template;
 
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -20,7 +25,20 @@ public class ApiWiserTemplates {
         return apiWiserServices
                 .stream()
                 .map(ServiceLoader.Provider::get)
-                .collect(toList());
+                .toList();
+    }
+
+    public static Map<String, Set<String>> modules() {
+        final var result = new HashMap<String, Set<String>>();
+        ApiWiserTemplates.list()
+                .stream()
+                // we are filtering out modules that do not produce any artifacts
+                // it may cause some frustration when a template provider forgot to turn on any of templates
+                // flags: isModelFile, isApiFile, or isSupportingFile
+                .filter(v -> ApiWiserTemplates.anyModuleOutput(v.moduleName()))
+                .forEach(v -> result
+                        .computeIfAbsent(v.moduleName(), k -> new TreeSet<>()).addAll(asList(v.moduleDependencies())));
+        return result;
     }
 
     public static boolean anyModuleOutput(String module) {

@@ -1,6 +1,6 @@
 package org.metalib.wiser.api.template.maven.model;
 
-public enum MavenScope {
+public enum MvnScope {
     TEST;
 
     @Override

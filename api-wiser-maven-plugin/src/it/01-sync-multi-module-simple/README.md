@@ -17,7 +17,7 @@ The test starts with a multi-module Maven project and runs the `sync` goal on it
 After running the `sync` goal, the project should have:
 
 1. Generated source code in the appropriate directories
-2. Properly configured Maven project properties and dependencies
+2. Properly configured Maven project properties and mavenDependencies
 
 ## How to Run
 

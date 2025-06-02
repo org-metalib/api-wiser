@@ -104,33 +104,29 @@ public class MavenRootPom implements ApiWiserTemplateService {
 
         // Modules
         final var bundleModules = bundle.modules();
-        final var templateModules = new HashMap<String, Set<String>>();
-        ApiWiserTemplates.list()
-                .stream()
-                // we are filtering out modules that do not produce any artifacts
-                // it may cause some frustration when a template provider forgot to turn on any of templates
-                // flags: isModelFile, isApiFile, or isSupportingFile
-                .filter(v -> ApiWiserTemplates.anyModuleOutput(v.moduleName()))
-                .forEach(v -> templateModules
-                        .computeIfAbsent(v.moduleName(), k -> new TreeSet<>()).addAll(asList(v.moduleDependencies())));
-        final var modules = orderByDependency(templateModules)
+        final var templateModules = ApiWiserTemplates.modules();
+        final var wiserModules = orderByDependency(templateModules)
                 .stream()
                 .filter(m -> !m.equals(ROOT))
                 .filter(m -> bundleModules.isEmpty() || bundleModules.contains(m))
                 .map(v -> bundle.artifactId() + DASH + v)
-                .collect(toList());
-        final var moduleSet = new HashSet<>(modules);
-        final var moduleList = clone.getModules().stream().filter(v -> !moduleSet.contains(v)).collect(toList());
-        moduleList.addAll(modules);
-        clone.setModules(moduleList);
+                .toList();
+        final var wiserModuleSet = new HashSet<>(wiserModules);
+        final var mavenModuleList = new java.util.ArrayList<>(clone
+                .getModules()
+                .stream()
+                .filter(v -> !wiserModuleSet.contains(v))
+                .toList());
+        mavenModuleList.addAll(wiserModules);
+        clone.setModules(mavenModuleList);
 
         // Update DependencyManagement section
         final var dependencies = new Dependencies(clone);
-        moduleList.forEach(v -> dependencies.findOrAdd(clone.getGroupId(), v).setVersion(clone.getVersion()));
+        mavenModuleList.forEach(v -> dependencies.findOrAdd(clone.getGroupId(), v).setVersion(clone.getVersion()));
 
         // Enforce pom.xml existence for each module
         final var projectDir = new File(bundleExt.get(X_API_WISER_PROJECT_DIR).toString());
-        moduleList.forEach(moduleName -> {
+        mavenModuleList.stream().filter(wiserModuleSet::contains).forEach(moduleName -> {
             final var moduleProperties = new Properties();
             moduleProperties.setProperty("api-wiser.module", moduleName.substring(clone.getArtifactId().length()+1));
 

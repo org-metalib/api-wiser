@@ -33,6 +33,7 @@ public class ApiWiserFinals {
     public static final String COLON = ":";
     public static final String DOUBLE_COLON = "::";
     public static final String DASH = "-";
+    public static final String ARRAY = "array";
     public static final String DOT = ".";
     public static final String SLASH = "/";
     public static final String SPACE = " ";
@@ -45,8 +46,13 @@ public class ApiWiserFinals {
 
     public static final String API_WISER = "api-wiser";
     public static final String X_API_WISER = "x-" + API_WISER;
-    public static final String X_API_WISER_TARGET_FILE = "x-" + API_WISER + "-target-file";
-    public static final String X_API_WISER_CONTEXT = "x-" + API_WISER + "-context";
+    public static final String X_API_WISER_TARGET_FILE = X_API_WISER + "-target-file";
+    public static final String X_API_WISER_GENERATED_RESOURCE_FOLDER = X_API_WISER + "-generated-resource-folder";
+    public static final String X_API_WISER_SOURCE_FOLDER = X_API_WISER + "-source-folder";
+    public static final String X_API_WISER_GENERATED_SOURCE_FOLDER = X_API_WISER + "-generated-source-folder";
+    public static final String X_API_WISER_API_PACKAGE = X_API_WISER + "-generated-api-package";
+    public static final String X_API_WISER_BASE_ENTITY_NAME = X_API_WISER + "-base-entity-name";
+    public static final String X_API_WISER_CONTEXT = X_API_WISER + "-context";
     private static final Properties API_WISER_META = loadMeta();
     public static final String API_WISER_VERSION = API_WISER_META.getProperty("api-wiser.version");
 

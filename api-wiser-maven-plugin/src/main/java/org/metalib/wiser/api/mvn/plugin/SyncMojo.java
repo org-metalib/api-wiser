@@ -1,7 +1,5 @@
 package org.metalib.wiser.api.mvn.plugin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.SneakyThrows;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Parent;
@@ -25,6 +23,7 @@ import org.metalib.wiser.api.template.ApiWiserTemplates;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -112,6 +111,13 @@ public class SyncMojo extends AbstractMojo {
             // Read the project's POM file
             final var model = modelReader.read(mavenProject.getModel().getPomFile(), Map.of());
 
+            // API Wiser module name
+            final var wiserModule = moduleName();
+            if (wiserModule.isBlank()) {
+                getLog().warn("Api Wiser does not manage: " + mavenProject.getArtifactId() + " module.");
+                return;
+            }
+
             // If this is a single-module project, convert it to a multi-module project
             if (isSinglePomProject(mavenProject)) {
                 final var pluginDescriptor = (PluginDescriptor) this.getPluginContext().get("pluginDescriptor");
@@ -123,7 +129,7 @@ public class SyncMojo extends AbstractMojo {
             }
 
             // If this is not the root module, add source directories
-            if (!ROOT.equals(moduleName())) {
+            if (!ROOT.equals(wiserModule)) {
                 mavenProject.addCompileSourceRoot(new File(projectBuildDir, "generated-sources").toString());
                 mavenProject.addTestCompileSourceRoot(new File(projectBuildDir, "generated-test-sources").toString());
             }
@@ -137,11 +143,11 @@ public class SyncMojo extends AbstractMojo {
                         .apiPackageName(projectPackage + ".api")
                         .modelPackageName(projectPackage + ".model")
                         .outputDir(outputDir())
-                        .inputSpec(apiSpec())
+                        .inputSpec(apiSpec(wiserModule))
                         .mavenGroupId(groupId())
                         .mavenArtifactId(artifactId())
                         .mavenVersion(version())
-                        .additionalProperty(X_API_WISER_MODULE, moduleName())
+                        .additionalProperty(X_API_WISER_MODULE, wiserModule)
                         .additionalProperty(X_API_WISER_MAVEN_BUILD_ROOT_PARENT, apiWiserBuildProp.rootParent())
                         .additionalProperty(X_API_WISER_MAVEN_BUILD_ROOT, apiWiserBuildProp.root())
                         .additionalProperty(X_API_WISER_PROJECT_DIR, projectDir)
@@ -170,7 +176,7 @@ public class SyncMojo extends AbstractMojo {
                 throw new MojoExecutionException("ApiWise Codegen Exception", e);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -218,7 +224,7 @@ public class SyncMojo extends AbstractMojo {
                                                                 mavenProject.getArtifactId())));
     }
 
-    File apiSpec() throws MojoExecutionException {
+    File apiSpec(String wiserModule) throws MojoExecutionException {
         final var apiSpecName = POM.equals(mavenProject.getPackaging())
                 ? mavenProject.getArtifactId()
                 : Optional.of(mavenProject)
@@ -228,25 +234,30 @@ public class SyncMojo extends AbstractMojo {
         if (null == apiSpecName) {
             throw new MojoExecutionException(format("Open API spec cannot be determined for project <%s>.", mavenProject.getArtifactId()));
         }
-        final var apiSpec = new File(apiFileDir(), apiSpecName + ".yaml");
+        final var apiSpec = new File(apiFileDir(wiserModule), apiSpecName + ".yaml");
         if (apiSpec.canRead()) {
             return apiSpec;
         }
         throw new MojoExecutionException(format("Open API spec <%s> not found.", apiSpec));
     }
 
-    File apiFileDir() {
-        switch (moduleName()) {
-            case "":
-            case ROOT:
-                return new File(projectDir, API);
-            default:
-                return new File(projectDir.getParent(), API);
-        }
+    File apiFileDir(String wiserModule) {
+        return switch (wiserModule) {
+            case "", ROOT -> new File(projectDir, API);
+            default -> new File(projectDir.getParent(), API);
+        };
     }
 
     String moduleName() {
-        return Optional.of(mavenProject).map(MavenProject::getProperties).map(v -> v.getProperty("api-wiser.module")).orElse("");
+        // We are adopting Maven 4 concept of the root module.
+        // If the current dir has ".mvn" subdir this module is the root module.
+        final var result = Optional.of(mavenProject).map(MavenProject::getProperties).map(v -> v.getProperty("api-wiser.module")).orElse("");
+        if (new File(mavenProject.getBasedir(), ".mvn").isDirectory()) {
+            return ROOT.equals(result) ? ROOT : "";
+        } else {
+            // A module that inherits "api-wiser.module" property from the root is not managed by API Wiser
+            return ROOT.equals(result) ? "" : result;
+        }
     }
 
 }

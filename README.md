@@ -24,7 +24,7 @@ The Api Wiser project is an API generator that converts OpenAPI specifications i
 * Model names is to short in dependency management section
 * For `model` module parent class package in extended inheritance resolved incorrectly
 
-## Api Wiser dependencies
+## Api Wiser mavenDependencies
 * Checkout [Maven Model Helper](https://github.com/fabric8io/maven-model-helper?tab=readme-ov-file#maven-model-helper) it helps to work with maven pom.xml model preserving comments
 
 ## Client/Server frameworks

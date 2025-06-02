@@ -1,6 +1,6 @@
 package org.metalib.wiser.api.template.model.jackson;
 
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.TypeSpec;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.metalib.wiser.api.template.ApiWiserBundle;
