@@ -7,6 +7,7 @@
         <version>0.0.8-SNAPSHOT</version>
     </parent>
 
+    <name>api-wiser-javapoet</name>
     <artifactId>api-wiser-javapoet</artifactId>
 
     <dependencies>

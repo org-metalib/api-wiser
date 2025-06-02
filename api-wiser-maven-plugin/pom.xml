@@ -8,6 +8,7 @@
     </parent>
     <packaging>maven-plugin</packaging>
 
+    <name>api-wiser-maven-plugin</name>
     <artifactId>api-wiser-maven-plugin</artifactId>
 
     <prerequisites>
@@ -73,6 +74,17 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>

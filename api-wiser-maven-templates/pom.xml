@@ -7,6 +7,7 @@
         <version>0.0.8-SNAPSHOT</version>
     </parent>
 
+    <name>api-wiser-maven-templates</name>
     <artifactId>api-wiser-maven-templates</artifactId>
 
     <dependencies>
