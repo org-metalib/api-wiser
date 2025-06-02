@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.metalib.api.wiser</groupId>
         <artifactId>api-wiser</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.9-SNAPSHOT</version>
     </parent>
 
     <name>api-wiapi-wiser-spring-app-templates</name>
