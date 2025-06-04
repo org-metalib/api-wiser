@@ -23,7 +23,9 @@
         <api-wiser.project-package>\${package}</api-wiser.project-package>
     </properties>
 
-    <mavenDependencies/>
+    <dependencies/>
+
+    <dependencyManagement/>
 
     <build>
         <plugins>

@@ -1,18 +1,36 @@
+import java.nio.file.Files
+import java.util.logging.FileHandler
 
 println "Executing the archetype-post-generate.groovy script...";
 
 def outputDir = new File(request.getOutputDirectory(), request.artifactId)
 
 def apiDir = new File(outputDir, '/api')
-def apiFile0 = new File( apiDir, '_artifactId_.yaml' )
-def apiFile1 = new File( apiDir, request.artifactId + '.yaml' )
-if (apiFile1.exists()) {
-    apiFile0.delete()
-    println "Api $apiFile1 found."
-} else if (apiFile0.exists()) {
-    apiFile0.renameTo(apiFile1)
-} else {
-    throw new Exception("Api Start Template Not found.")
+def apiOriginFile = new File( System.getProperty('user.dir'), request.artifactId)
+if (!apiOriginFile.exists()) {
+    apiOriginFile = new File( System.getProperty('user.dir'), '/api')
+}
+
+def apiTemplateFile = new File( apiDir, '_artifactId_.yaml' )
+def apiTargetFile = new File( apiDir, request.artifactId + '.yaml' )
+
+def openapi = System.getProperty('openapi')
+def openapiFile = new File(openapi)
+
+if (apiTargetFile.exists()) {
+    apiTemplateFile.delete()
+    println "Api $apiTargetFile found."
+} else if (openapiFile.exists()) {
+    Files.copy(openapiFile.toPath(), apiTargetFile.toPath())
+    apiTemplateFile.delete()
+    println "openapi ($openapi) found."
+} else if (apiOriginFile.exists()) {
+    Files.copy(apiOriginFile.toPath(), apiTargetFile.toPath())
+    apiTemplateFile.delete()
+    println "original ($apiOriginFile) found."
+} else if (apiTemplateFile.exists()) {
+    apiTemplateFile.renameTo(apiTargetFile)
+    println "Adding api file from a template ($apiTemplateFile)."
 }
 
 def proc = new ProcessBuilder(["mvn", "wrapper:wrapper", "initialize"])
