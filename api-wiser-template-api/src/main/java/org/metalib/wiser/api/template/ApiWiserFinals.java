@@ -40,6 +40,7 @@ public class ApiWiserFinals {
     public static final String EMPTY = "";
     public static final String LF = "\n";
     public static final String CR = "\r";
+    public static final String POM_DOT_XML = POM + DOT + XML;
     public static final String POM_MODEL_VERSION = "4.0.0";
     public static final String POM_MODEL_ENCODING = "UTF-8";
     public static final int INDEX_NOT_FOUND = -1;

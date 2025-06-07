@@ -33,7 +33,7 @@ if (apiTargetFile.exists()) {
     println "Adding api file from a template ($apiTemplateFile)."
 }
 
-def proc = new ProcessBuilder(["mvn", "wrapper:wrapper", "initialize"])
+def proc = new ProcessBuilder(["mvn", "wrapper:wrapper", "initialize", "initialize"])
         .directory(outputDir)
         .redirectErrorStream(true)
         .start()

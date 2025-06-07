@@ -39,6 +39,15 @@ public class MvnPlugins {
         return this;
     }
 
+    public Plugin findOrAdd(String groupId, String artifactId) {
+        return Optional.of(map).map(v -> v.get(key(groupId, artifactId))).orElseGet(() -> {
+            final var result = new Plugin();
+            result.setGroupId(groupId);
+            result.setArtifactId(artifactId);
+            add(result);
+            return result;
+        });
+    }
 
     public MvnPlugins add(Plugin plugin) {
         map.computeIfAbsent(

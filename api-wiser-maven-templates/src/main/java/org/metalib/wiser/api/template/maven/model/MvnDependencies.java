@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class MvnDependencies {
@@ -82,6 +83,36 @@ public class MvnDependencies {
 
     public List<Dependency> list() {
         return list;
+    }
+
+    public static Dependency toDependency(String coords) {
+        return Optional.ofNullable(coords).map(v -> {
+            final var parts = v.split(":");
+            final var dependency = new Dependency();
+
+            if (parts.length == 0) {
+                return dependency;
+            }
+
+            if (parts.length == 1) {
+                // only artifactId is provided. We consider it from api-wiser family.
+                dependency.setGroupId("org.metalib.api.wiser");
+                dependency.setArtifactId(parts[0]);
+                dependency.setVersion("${api-wiser.version}");
+                return dependency;
+            }
+
+            dependency.setGroupId(parts[0]);
+            dependency.setArtifactId(parts[1]);
+
+            if (parts.length > 2) {
+                dependency.setVersion(parts[2]);
+            }
+            if (parts.length > 3) {
+                dependency.setScope(parts[3]);
+            }
+            return dependency;
+        }).orElse(null);
     }
 
     private static String key(String groupId, String artifactId) {
