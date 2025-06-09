@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.metalib.api.wiser</groupId>
         <artifactId>api-wiser</artifactId>
-        <version>0.0.12</version>
+        <version>0.0.13-SNAPSHOT</version>
     </parent>
 
     <name>api-wiser-archetype</name>
