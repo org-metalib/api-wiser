@@ -33,17 +33,27 @@ if (apiTargetFile.exists()) {
     println "Adding api file from a template ($apiTemplateFile)."
 }
 
-def proc = new ProcessBuilder(["mvn", "wrapper:wrapper", "initialize", "initialize"])
-        .directory(outputDir)
-        .redirectErrorStream(true)
-        .start()
-proc.inputStream.eachLine {println it}
-proc.waitForOrKill(10000)
-if( proc.exitValue() != 0){
-    String errorMsg = "ERROR during the maven execution."
-    println "->  $errorMsg"
-    throw new Exception("$errorMsg")
-} else {
-    println "-> Finished maven execution"
+def runMaven(File workDir, String... args) {
+    def baseCommand = ["mvn"]
+    def command = baseCommand + args.toList()
+
+    def proc = new ProcessBuilder(command)
+            .directory(workDir)
+            .redirectErrorStream(true)
+            .start()
+
+    proc.inputStream.eachLine { println it }
+    proc.waitForOrKill(10000)
+
+    if (proc.exitValue() != 0) {
+        def errorMsg = "ERROR during maven execution: ${args.join(' ')}"
+        println "->  $errorMsg"
+        throw new Exception(errorMsg)
+    }
+
+    println "-> Finished maven execution: ${args.join(' ')}"
 }
 
+runMaven(outputDir, "wrapper:wrapper")
+runMaven(outputDir, "initialize")
+runMaven(outputDir, "initialize")

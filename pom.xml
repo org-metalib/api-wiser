@@ -29,7 +29,7 @@
     <properties>
         <pom.root.parent.groupId>org.metalib.maven.pom</pom.root.parent.groupId>
         <pom.root.parent.artifactId>metalib-spring-pom</pom.root.parent.artifactId>
-        <pom.root.parent.version>0.0.69</pom.root.parent.version>
+        <pom.root.parent.version>0.0.70</pom.root.parent.version>
         <api-wiser.groupId>org.metalib.api.wiser</api-wiser.groupId>
         <api-wiser.artifactId>api-wiser</api-wiser.artifactId>
         <api-wiser.version>${project.version}</api-wiser.version>
