@@ -39,6 +39,11 @@
         <dependencies>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
+                <artifactId>api-wiser-core</artifactId>
+                <version>0.0.12-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-template-api</artifactId>
                 <version>0.0.12-SNAPSHOT</version>
             </dependency>
@@ -61,11 +66,6 @@
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-spring-app-templates</artifactId>
                 <version>0.0.12-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.metalib.api.wiser</groupId>
-                <artifactId>api-wiser-archetype-maven-extension</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
