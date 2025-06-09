@@ -11,7 +11,7 @@
     <name>api-wiser</name>
     <groupId>org.metalib.api.wiser</groupId>
     <artifactId>api-wiser</artifactId>
-    <version>0.0.11-SNAPSHOT</version>
+    <version>0.0.11</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -40,27 +40,27 @@
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-template-api</artifactId>
-                <version>0.0.11-SNAPSHOT</version>
+                <version>0.0.11</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-javapoet</artifactId>
-                <version>0.0.11-SNAPSHOT</version>
+                <version>0.0.11</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-maven-templates</artifactId>
-                <version>0.0.11-SNAPSHOT</version>
+                <version>0.0.11</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-http-client-templates</artifactId>
-                <version>0.0.11-SNAPSHOT</version>
+                <version>0.0.11</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
                 <artifactId>api-wiser-spring-app-templates</artifactId>
-                <version>0.0.11-SNAPSHOT</version>
+                <version>0.0.11</version>
             </dependency>
             <dependency>
                 <groupId>org.metalib.api.wiser</groupId>
@@ -165,6 +165,6 @@
         <connection>scm:git:git://github.com/org-metalib/api-wiser.git</connection>
         <developerConnection>scm:git:https://github.com/org-metalib/api-wiser.git</developerConnection>
         <url>https://github.com/org-metalib/api-wiser</url>
-        <tag>HEAD</tag>
+        <tag>v0.0.11</tag>
     </scm>
 </project>

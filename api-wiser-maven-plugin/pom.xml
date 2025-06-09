@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.metalib.api.wiser</groupId>
         <artifactId>api-wiser</artifactId>
-        <version>0.0.11-SNAPSHOT</version>
+        <version>0.0.11</version>
     </parent>
     <packaging>maven-plugin</packaging>
 
