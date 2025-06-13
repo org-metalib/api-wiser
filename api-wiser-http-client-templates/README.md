@@ -1,4 +1,4 @@
-# Java Http Client API Wiser Template
+# Java HTTP Client API Wiser Template
 
 ## Overview
 
@@ -8,6 +8,40 @@ The templates in this module generate:
 - HTTP client classes that implement API interfaces
 - Response wrapper classes for handling API responses
 - Maven POM files for configuring the HTTP client module
+
+## Integration
+
+This module is designed to work with the API Wiser framework. When generating code with API Wiser, these templates can
+be used to create HTTP client implementations for your API definitions.
+
+To use these templates, you need to add `api-wiser-http-client-templates` module as a dependency to the API Wiser maven plugin:
+```xml
+<plugin>
+    <groupId>org.metalib.api.wiser</groupId>
+    <artifactId>api-wiser-maven-plugin</artifactId>
+    <version>${api-wiser.version}</version>
+    <executions>
+        <execution>
+            <phase>initialize</phase>
+            <goals>
+                <goal>sync</goal>
+            </goals>
+        </execution>
+    </executions>
+    <dependencies>
+        <dependency>
+            <groupId>org.metalib.api.wiser</groupId>
+            <artifactId>api-wiser-maven-templates</artifactId>
+            <version>${api-wiser.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.metalib.api.wiser</groupId>
+            <artifactId>api-wiser-http-client-templates</artifactId>
+            <version>${api-wiser.version}</version>
+        </dependency>
+    </dependencies>
+</plugin>
+```
 
 ## Key Features
 
@@ -25,8 +59,8 @@ The templates in this module generate:
 
 ### Maven Integration
 - Generates Maven POM files for the HTTP client module
-- Sets up proper mavenDependencies and parent project relationships
-- Configures the module with necessary libraries
+- Sets up proper Maven dependencies and parent project relationships
+- Configures the module with the necessary libraries
 
 ## Template Classes
 
@@ -54,26 +88,18 @@ import java.time.Duration;
 public class Example {
     public static void main(String[] args) {
         // Create the HTTP client
-        HttpClient httpClient = HttpClient.newBuilder()
+        final var httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
 
         // Create the Jackson ObjectMapper
-        ObjectMapper objectMapper = new ObjectMapper();
+        final var objectMapper = new ObjectMapper();
 
         // Create the API client
-        ExampleApi api = new ExampleHttpClient(
-                "https://api.example.com",
-                httpClient,
-                objectMapper);
+        ExampleApi api = new ExampleHttpClient("https://api.example.com", httpClient, objectMapper);
 
         // Call API methods
         SomeResponse response = api.someOperation("param1", "param2");
     }
 }
 ```
-
-## Integration with API Wiser
-
-This module is designed to work with the API Wiser framework. When generating code with API Wiser, these templates can 
-be used to create HTTP client implementations for your API definitions.

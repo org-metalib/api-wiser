@@ -1,59 +1,42 @@
-# The Api Wiser 
+# API Wiser 
 
-## Overview
+[![Maven Central](https://img.shields.io/maven-central/v/org.metalib.api.wiser/api-wiser.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.metalib.api.wiser/api-wiser)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-The Api Wiser project is an API generator that converts OpenAPI specifications into Java code
+`API Wiser` is a powerful tool designed to streamline the development of Java applications by generating complete Maven project code directly from your OpenAPI Specification. Leveraging the robust Java model provided by OpenAPI Tools, `API Wiser` helps developers kickstart their API-driven projects with a solid, convention-over-configuration foundation.
 
-## Modules
+Instead of manually setting up project structure, dependencies, and basic API client/server code, `API Wiser` automates this repetitive process, allowing you to focus on implementing business logic and unique features.
 
-| Name                                                               |                                     |
-|--------------------------------------------------------------------|-------------------------------------|
-| [api-wiser-archetype](api-wiser-archetype)                         | API Wiser Maven Archetype           | 
-| [api-wiser-core](api-wiser-core)                                   | Core module                         |
-| [api-wiser-http-client-templates](api-wiser-http-client-templates) | Java HTTP Client Template           |
-| [api-wiser-javapoet](api-wiser-javapoet)                           | Java Poet Type Reference resolution |
-| [api-wiser-maven-plugin](api-wiser-maven-plugin)                   | API Wiser Maven Plugin              |
-| [api-wiser-maven-templates](api-wiser-maven-templates)             | Maven Core Module Templates         |
-| [api-wiser-spring-app-templates](api-wiser-spring-app-templates)   | Spring App Module Template          |
-| [api-wiser-template-api](api-wiser-template-api)                   | API Wiser Template API              |
+By using `API Wiser`, you gain several significant advantages:
 
+* **Accelerated Development:** Rapidly generate a working Maven project, significantly reducing setup time and speeding up your project's initial phase.
+* **Consistency and Standards:** Ensure consistent project structure and adherence to best practices across all your API-driven services, thanks to code generation from a centralized OpenAPI definition.
+* **Reduced Boilerplate:** Eliminate the tedious task of writing repetitive boilerplate code for API clients, servers, and data models.
+* **OpenAPI-Driven:** Fully leverages the power of the OpenAPI Specification as the single source of truth for your API, promoting better design and documentation.
+* **Extensible and Customizable:** While providing a robust default generation, the underlying OpenAPI Tools model allows for further customization and integration into your specific development workflows.
+* **Maven-Centric:** Generates standard Maven projects, making it easy to integrate into existing Java development ecosystems and build pipelines.
 
+## Project Modules
 
-## Issues
-* Instead of jackson-annotations dependency it must be jackson-databind for `model` module.
-* Model names is to short in dependency management section
-* For `model` module parent class package in extended inheritance resolved incorrectly
+| Name                                                                         |                                     |
+|------------------------------------------------------------------------------|-------------------------------------|
+| [api-wiser-archetype](api-wiser-archetype/README.md)                         | API Wiser Maven Archetype           | 
+| [api-wiser-core](api-wiser-core/README.md)                                   | Core module                         |
+| [api-wiser-http-client-templates](api-wiser-http-client-templates/README.md) | Java HTTP Client Template           |
+| [api-wiser-javapoet](api-wiser-javapoet/README.md)                           | Java Poet Type Reference resolution |
+| [api-wiser-maven-plugin](api-wiser-maven-plugin/README.md)                   | API Wiser Maven Plugin              |
+| [api-wiser-maven-templates](api-wiser-maven-templates/README.md)             | Maven Core Module Templates         |
+| [api-wiser-spring-app-templates](api-wiser-spring-app-templates/README.md)   | Spring App Module Template          |
+| [api-wiser-template-api](api-wiser-template-api/README.md)                   | API Wiser Template API              |
 
-## Api Wiser mavenDependencies
-* Checkout [Maven Model Helper](https://github.com/fabric8io/maven-model-helper?tab=readme-ov-file#maven-model-helper) it helps to work with maven pom.xml model preserving comments
+## Getting Started and Examples
 
-## Client/Server frameworks
-* Java Http Client
-* Java HttpURLConnection
-* Spring Boot
-  * Spring RestTemplate
-  * Spring WebFlux WebClient Netty
-  * Spring WebFlux WebClient Jetty
-* [Reactor Netty](https://github.com/reactor/reactor-netty)
-* [Micronaut](https://micronaut.io/)
-* [Jersey](https://eclipse-ee4j.github.io/jersey/)
-* [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.2.x/)
-* [Google HTTP Client Library for Java](https://github.com/googleapis/google-http-java-client)
-* [Unirest (http client)](https://kong.github.io/unirest-java/) 
-* [Open Feign](https://github.com/OpenFeign/feign)
-* [Methanol](https://mizosoft.github.io/methanol/)
-* [OkHttp](https://square.github.io/okhttp/)
-* [Retrofit](https://square.github.io/retrofit/)
-* [ActiveJ](https://github.com/activej/activej)
-* [Armeria](https://armeria.dev/)
-* https://janusgraph.org/
-* [Cacheonix](https://www.cacheonix.org/) - Java cache
-* https://ignite.apache.org/ - Distributed Database
-* https://github.com/real-logic/aeron
-* https://github.com/real-logic/agrona
-* https://github.com/JCTools/JCTools
-* [FastAPI Httpbin](https://httpbin.dmuth.org/)
-* [Wiser](https://github.com/voodoodyne/subethasmtp/blob/master/Wiser.md) - to unit test email sending code
+To see `API Wiser` in action and understand how to integrate it into your development process, please refer to our dedicated showcase repository:
+
+[**API Wiser Showcase Repository**](https://github.com/org-metalib/api-wiser-showcase)
 
 ## References
+* [Github: OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator)
+* [Github: javapoet](https://github.com/palantir/javapoet?tab=readme-ov-file#javapoet)
+* 
 * [Another API generator](https://github.com/fern-api/fern)

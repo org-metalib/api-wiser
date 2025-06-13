@@ -14,10 +14,11 @@ To create a new project using this archetype, use the following Maven command:
 mvn archetype:generate -B \
   -DarchetypeGroupId=org.metalib.api.wiser \
   -DarchetypeArtifactId=api-wiser-archetype \
-  -DarchetypeVersion=0.0.2 \
+  -DarchetypeVersion=0.0.12 \
   -DgroupId='<your-group-id>' \
   -DartifactId='<your-artifact-id>' \
-  -Dversion='<your-version>'
+  -Dversion='<your-version>' \
+  -Dopenapi=`<path-to-openapi-spec-file>`
 ```
 
 Parameters:
@@ -25,22 +26,22 @@ Parameters:
 - `archetypeArtifactId`: api-wiser-archetype
 - `archetypeVersion`: Current version is `0.0.2`
 - `groupId`: Your project's group identifier. 
-   > The `groupId` name should follow java package naming convention.
+   > The `groupId` name should follow Java package naming convention.
 - `artifactId`: Your project's artifact name
 - `version`: Your project's version
+- `openapi`: path to an openapi spec file
 
-```shell
-mkdir target
-cd target
-mvn archetype:generate -B \
-  -DarchetypeGroupId=org.metalib.api.wiser \
-  -DarchetypeArtifactId=api-wiser-archetype \
-  -DarchetypeVersion=0.0.2 \
-  -DgroupId=org.metalib.http.bin.fast \
-  -DartifactId=fast-http-bin \
-  -Dversion=0.0.1-SNAPSHOT
+It generates a multi-module Maven project for the provided openapi spec:
+* `<your-artifact-id>-model` module - Contains the data models for the Museum API.
+* `<your-artifact-id>-api` module - Contains the API definitions and OpenAPI specification.
+* `<your-artifact-id>-biz` module - Contains business logic for the API.
+
+```mermaid
+flowchart TB
+  model[<your-artifact-id>-model]
+  api[<your-artifact-id>-api]
+  biz[<your-artifact-id>-biz]
+
+  biz -->| implements | api
+  api -->| uses | model
 ```
-
-## Features
-- OpenAPI schema management
-- Maven project structure

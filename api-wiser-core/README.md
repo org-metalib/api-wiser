@@ -1,66 +1,55 @@
-# api-wiser-core - API Wiser Core
+# API Wiser Core
 
 ## Overview
 
-API Wiser Core is a foundational module that provides essential functionality for API development.
-This module serves as the core component containing common utilities, base configurations, and shared 
-components used across the API Wiser ecosystem.
+API Wiser Core is a foundational module that provides the essential functionality for API development within the API Wiser ecosystem. It serves as the central component containing common utilities, base configurations, and shared components.
 
-The core module is responsible for converting OpenAPI specifications into Java code, providing
-a flexible and customizable code generation framework.
+The primary responsibility of this module is to drive the conversion of OpenAPI specifications into Java code. It offers a flexible and customizable framework for code generation, allowing developers to tailor the output to their specific needs.
 
-> NOTE: API Wiser template implementation must not use this module as a dependency.
+> **NOTE:** API Wiser template implementations must not use this module as a dependency.
 
-## Key Components
+## Code Generation Workflow
 
-### Code Generation
+The code generation process in `api-wiser-core` is designed to be flexible and extensible. The workflow is orchestrated by a few key components that work together to parse an OpenAPI specification, apply custom configurations, and generate code using templates.
 
-* `ApiWiserCodegen` - A generator configuration implementation that extends OpenAPI Tools' AbstractJavaCodegen.
-  It configures and customizes the code generation process for Java code generated from OpenAPI specifications.
+1. **Configuration**: The process begins with `ApiWiserCodegen`, which contains the configuration for code generation. This includes details like package names, model naming conventions, and other customizations.
+2.  **Execution**: The `ApiWiserCode` builder is used to configure and create an `ApiWiserGenerator` instance.
+3.  **Generation**: The `ApiWiserGenerator` takes the OpenAPI specification and, guided by the `ApiWiserCodegen` configuration, generates the code.
+4.  **Templating**: During generation, the `ApiWiserTemplatingEngine` is responsible for processing the templates (e.g., Mustache templates) to produce the final code.
 
-* `ApiWiserCode` - A builder class for creating and configuring ApiWiserGenerator instances.
-  It provides a fluent interface for setting various configuration options for code generation.
+### Key Components
 
-* `ApiWiserGenerator` - A code generator that extends OpenAPI Tools' DefaultGenerator.
-  It generates code from OpenAPI specifications based on the configuration provided by ApiWiserCodegen.
-
-* `ApiWiserTemplatingEngine` - A templating engine adapter that implements OpenAPI Tools' TemplatingEngineAdapter.
-  It handles templates in the API Wiser system, loading and managing templates from ApiWiserTemplates.
-
-### Model Classes
-
-* `ApiWiserModel` - A utility class for creating and manipulating API Wiser model objects.
-  It provides methods to convert maps to specific API Wiser model objects.
-
-* `ApiWiserContext` - Represents a context for API Wiser operations.
-  It holds information about Maven mavenDependencies organized by category.
-
-* `ApiWiserPath` - Represents a path in the API Wiser system with context information for different modules.
-  It contains a map of module contexts where each context has imports and properties.
-
+The following class diagram illustrates the relationships between the main components involved in the code generation process.
 ```mermaid
 classDiagram
-    class AbstractJavaCodegen
-    class ApiWiserConfig {
-        <<interface>>
-    }
+  class AbstractJavaCodegen
+  class ApiWiserConfig {
+    <<interface>>
+  }
 
-    class ApiWiserCodegen {
-    }
+  class ApiWiserCodegen {
+  }
 
-    class ApiWiserTemplatingEngine {
-    }
+  class ApiWiserTemplatingEngine {
+  }
 
-    class ApiWiserCode {
-    }
+  class ApiWiserCode {
+  }
 
-    class ApiWiserGenerator {
-    }
+  class ApiWiserGenerator {
+  }
 
-    AbstractJavaCodegen <|-- ApiWiserCodegen
-    ApiWiserConfig <|.. ApiWiserCodegen
-    ApiWiserCode ..> ApiWiserGenerator : creates
-    DefaultGenerator <|-- ApiWiserGenerator
-    TemplatingEngineAdapter <|.. ApiWiserTemplatingEngine
-    ApiWiserGenerator ..> ApiWiserTemplatingEngine : uses
+  AbstractJavaCodegen <|-- ApiWiserCodegen
+  ApiWiserConfig <|.. ApiWiserCodegen
+  ApiWiserCode ..> ApiWiserGenerator : creates
+  DefaultGenerator <|-- ApiWiserGenerator
+  TemplatingEngineAdapter <|.. ApiWiserTemplatingEngine
+  ApiWiserGenerator ..> ApiWiserTemplatingEngine : uses
 ```
+
+## Model Classes
+
+The core module also defines several model classes that are used to hold data and context during the code generation process.
+* **`ApiWiserModel`**: A utility class for creating and manipulating API Wiser model objects. It provides convenient methods to convert maps into specific API Wiser model objects, simplifying the handling of model data.
+* **`ApiWiserContext`**: Represents the context for API Wiser operations. It is primarily used to hold information about Maven dependencies, organized by category, which can be injected into the templates.
+* **`ApiWiserPath`**: Represents a path in the API Wiser system, containing context information for different modules. It holds a map of module contexts, where each context can have its own set of imports and properties.

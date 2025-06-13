@@ -16,10 +16,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 
 /**
- * Primitive, class and parameterized class info resolution
+ * Primitive, class, and parameterized class info resolution
  */
 @Value
 @Builder(toBuilder = true)
@@ -27,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 public class TypeRefInfo {
 
   /**
-   * java primitive types
+   * Java primitive types
    * This map is used to resolve and refer to primitive types, including `void`
    * within the context of the `TypeRefInfo` class.
    */
@@ -48,7 +47,7 @@ public class TypeRefInfo {
 
   /**
    * Parses a type string into a `TypeRefInfo` object. Supports generics and arrays.
-   * @param type java type
+   * @param type Java type
    * @param imports import set
    * @return TypeRefInfo instance
    */
@@ -80,7 +79,7 @@ public class TypeRefInfo {
 
   /**
    * Checks if a type exists in the provided imports and resolves it to its fully qualified name if necessary.
-   * @param type java type
+   * @param type Java type
    * @param imports import set
    * @return String
    */
@@ -95,7 +94,7 @@ public class TypeRefInfo {
    * @return List&lt;String&gt; instance
    */
   public static List<String> parseTypeList(String typeList) {
-    // we don't parse comments although we most likely should.
+    // We don't parse comments, although we most likely should.
     final var result = new ArrayList<String>();
     int level = 0;
     final var buffer = new StringBuilder();
