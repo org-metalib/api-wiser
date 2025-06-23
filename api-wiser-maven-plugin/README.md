@@ -55,3 +55,40 @@ The plugin is highly extensible. It relies on template dependencies to generate 
 
 #### 3. Convention over Configuration
 The plugin follows a "convention over configuration" approach by establishing a standard, three-module project structure (`model`, `api`, `biz`). This enforces a clean architecture and separation of concerns across different layers of an application, which is a widely accepted best practice in software engineering.
+
+#### 4. Configurable Module Generation
+The plugin allows you to control which modules are generated. By default, all available modules are generated, but you can specify a list of modules to generate:
+
+- **Specify Modules to Generate:** If you only want to generate specific modules, you can set the `api-wiser.modules` property in your Maven configuration:
+
+```xml
+<plugin>
+    <groupId>org.metalib.api.wiser</groupId>
+    <artifactId>api-wiser-maven-plugin</artifactId>
+    <version>${api-wiser.version}</version>
+    <configuration>
+        <modules>
+            <module>model</module>
+            <module>api</module>
+            <!-- Exclude biz module by not listing it -->
+        </modules>
+    </configuration>
+    <!-- ... other plugin configuration ... -->
+</plugin>
+```
+
+Alternatively, you can set this property on the command line:
+
+```bash
+mvn initialize -Dapi-wiser.modules=model,api
+```
+
+The available modules for `org.metalib.api.wiser:api-wiser-maven-templates` include:
+- `model`: Data model and DTO classes
+- `api`: API interface definitions
+- `biz`: Business logic implementations
+
+Additional modules may be available depending on the template dependencies you've included
+
+This is particularly useful when you only need specific modules and want to exclude others. 
+For example, you might only need the API definition and model classes, but plan to implement the business logic elsewhere or using a different approach.

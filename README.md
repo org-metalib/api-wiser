@@ -36,7 +36,7 @@ To see `API Wiser` in action and understand how to integrate it into your develo
 [**API Wiser Showcase Repository**](https://github.com/org-metalib/api-wiser-showcase)
 
 ## References
+* [Github: API Wiser](https://github.com/org-metalib/api-wiser)]
 * [Github: OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator)
 * [Github: javapoet](https://github.com/palantir/javapoet?tab=readme-ov-file#javapoet)
-* 
 * [Another API generator](https://github.com/fern-api/fern)

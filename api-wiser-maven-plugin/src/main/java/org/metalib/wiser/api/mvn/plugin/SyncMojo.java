@@ -9,6 +9,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.metalib.wiser.api.core.java.code.ApiWiserCode;
 import org.metalib.wiser.api.template.ApiWiserMavenDependency;
 import org.metalib.wiser.api.mvn.plugin.conversion.SingleToMulti;
@@ -20,19 +21,25 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MAVEN_BUILD_ROOT_PARENT;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MAVEN_BUILD_ROOT;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MAVEN_DEPENDENCIES_NAME;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MODULE;
+import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_MODULES;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_PROJECT_BUILD_DIR;
 import static org.metalib.wiser.api.core.java.code.ApiWiserConst.X_API_WISER_PROJECT_DIR;
 import static org.metalib.wiser.api.mvn.plugin.conversion.SingleToMulti.isSinglePomProject;
 import static org.metalib.wiser.api.template.ApiWiserEvents.MAVEN_SYNC;
 import static org.metalib.wiser.api.template.ApiWiserFinals.API_WISER;
+import static org.metalib.wiser.api.template.ApiWiserFinals.BIZ;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
 import static org.metalib.wiser.api.template.ApiWiserFinals.ROOT;
 
@@ -63,12 +70,39 @@ public class SyncMojo extends ApiWiserAbstractMojo {
     DefaultModelWriter modelWriter;
 
     /**
+     * List of modules to generate.
+     * If specified, only the listed modules will be generated.
+     * If not specified, all available modules will be generated.
+     * Available modules include: "model", "api", "biz", and others depending on the included template dependencies.
+     */
+    @Parameter( property = "api-wiser.modules" )
+    List<String> modules;
+
+    /**
+     * Returns a list of modules to generate.
+     * If the modules parameter is specified, only those modules will be generated.
+     * If the modules parameter is not specified, all available modules will be generated.
+     *
+     * @return a list of modules to generate
+     */
+    private List<String> getModulesToGenerate() {
+        if (modules != null && !modules.isEmpty()) {
+            final var requestedModules = new HashSet<String>();
+            requestedModules.add("root");
+            requestedModules.addAll(modules);
+            return requestedModules.stream().toList();
+        } else {
+            return ApiWiserTemplates.modules().keySet().stream().toList();
+        }
+    }
+
+    /**
      * Executes the goal.
      * <p>
      * This method initializes API Wiser controls for the Maven project.
      * If the project is a single-module project, it will be converted to a multi-module project.
      * Otherwise, it will set up source directories and generate code based on the API specification.
-     * 
+     *
      * @throws MojoExecutionException if an error occurs during execution
      * @throws MojoFailureException if the execution fails
      */
@@ -122,6 +156,7 @@ public class SyncMojo extends ApiWiserAbstractMojo {
                         .additionalProperty(X_API_WISER_PROJECT_BUILD_DIR, projectBuildDir)
                         .additionalProperty(X_API_WISER_MAVEN_MODEL, model)
                         .additionalProperty(X_API_WISER_MAVEN_DEPENDENCIES_NAME, List.of())
+                        .additionalProperty(X_API_WISER_MODULES, getModulesToGenerate())
                         .build().generator();
 
                 // Configure the generator
