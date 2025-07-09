@@ -60,6 +60,8 @@ public class SpringAppTemplate implements ApiWiserTemplateService {
     @Override
     public String toText(ApiWiserBundle bundle) {
         final var springAppPackage = bundle.basePackage();
-        return JavaFile.builder(springAppPackage, createSpringAppClassBuilder(bundle).build()).build().toString();
+        return JavaFile.builder(springAppPackage, createSpringAppClassBuilder(bundle).build())
+                .skipJavaLangImports(true)
+                .build().toString();
     }
 }

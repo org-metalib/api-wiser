@@ -34,6 +34,8 @@ public class ApiWiserFinals {
     public static final String DOUBLE_COLON = "::";
     public static final String DASH = "-";
     public static final String ARRAY = "array";
+    public static final String QUERY = "query";
+    public static final String QUERY_CAPITALISED = capitalize(QUERY).toString();
     public static final String DOT = ".";
     public static final String SLASH = "/";
     public static final String SPACE = " ";
@@ -79,5 +81,19 @@ public class ApiWiserFinals {
             result.load(resources);
             return result;
         }
+    }
+
+    public static CharSequence capitalizeWithQuery(CharSequence str) {
+        return capitalize(str) + QUERY_CAPITALISED;
+    }
+
+    public static CharSequence capitalize(CharSequence str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        if (str.length() == 1) {
+            return String.valueOf(Character.toUpperCase(str.charAt(0)));
+        }
+        return Character.toUpperCase(str.charAt(0)) + str.subSequence(1, str.length()).toString();
     }
 }

@@ -6,7 +6,6 @@ import com.palantir.javapoet.MethodSpec;
 import com.palantir.javapoet.ParameterSpec;
 import com.palantir.javapoet.TypeSpec;
 import com.palantir.javapoet.TypeVariableName;
-import lombok.Getter;
 import org.metalib.wiser.api.template.ApiWiserBundle;
 import org.metalib.wiser.api.template.ApiWiserConfig;
 import org.metalib.wiser.api.template.ApiWiserTargetFile;
@@ -116,6 +115,7 @@ public class HttpClientDefaultExceptionTemplate implements ApiWiserTemplateServi
     public String toText(ApiWiserBundle bundle) {
         final var jacksonBodyHandlerPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
         return JavaFile.builder(jacksonBodyHandlerPackage, httpDefaultExceptionTypeBuilder().build())
+                .skipJavaLangImports(true)
                 .build().toString();
     }
 

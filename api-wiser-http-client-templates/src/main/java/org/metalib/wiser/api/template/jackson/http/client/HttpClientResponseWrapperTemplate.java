@@ -116,6 +116,7 @@ public class HttpClientResponseWrapperTemplate implements ApiWiserTemplateServic
     public String toText(ApiWiserBundle bundle) {
         final var jacksonBodyHandlerPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
         return JavaFile.builder(jacksonBodyHandlerPackage, genericResponseTypeBuilder().build())
+                .skipJavaLangImports(true)
                 .build().toString();
     }
 

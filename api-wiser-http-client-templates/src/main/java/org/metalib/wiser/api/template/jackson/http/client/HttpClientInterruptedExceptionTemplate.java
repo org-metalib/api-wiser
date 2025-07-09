@@ -115,6 +115,7 @@ public class HttpClientInterruptedExceptionTemplate implements ApiWiserTemplateS
     public String toText(ApiWiserBundle bundle) {
         final var jacksonBodyHandlerPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
         return JavaFile.builder(jacksonBodyHandlerPackage, httpClientInterruptedExceptionTypeBuilder().build())
+                .skipJavaLangImports(true)
                 .build().toString();
     }
 

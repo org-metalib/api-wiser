@@ -68,6 +68,6 @@ public class SpringControllerTemplate implements ApiWiserTemplateService {
     public String toText(ApiWiserBundle bundle) {
         final var springServerPackage = bundle.basePackage() + DOT + CONTROLLER;
         final var springServer = createSpringControllerBuilder(bundle).build();
-        return JavaFile.builder(springServerPackage, springServer).build().toString();
+        return JavaFile.builder(springServerPackage, springServer).skipJavaLangImports(true).build().toString();
     }
 }

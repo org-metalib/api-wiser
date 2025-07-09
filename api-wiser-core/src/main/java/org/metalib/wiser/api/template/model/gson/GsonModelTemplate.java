@@ -61,6 +61,6 @@ public class GsonModelTemplate implements ApiWiserTemplateService {
     public String toText(ApiWiserBundle bundle) {
         final var modelPackage = bundle.basePackage() + DOT + TEMPLATE_NAME.replace(DASH, DOT);
         final var model = createModelBuilder(bundle).build();
-        return JavaFile.builder(modelPackage, model).build().toString();
+        return JavaFile.builder(modelPackage, model).skipJavaLangImports(true).build().toString();
     }
 }

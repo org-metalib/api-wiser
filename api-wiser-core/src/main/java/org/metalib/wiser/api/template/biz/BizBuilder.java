@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.metalib.wiser.api.template.ApiWiserFinals.DOT;
+import static org.metalib.wiser.api.template.ApiWiserFinals.QUERY;
+import static org.metalib.wiser.api.template.ApiWiserFinals.capitalizeWithQuery;
 import static org.openapitools.codegen.utils.StringUtils.camelize;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -58,6 +60,7 @@ public class BizBuilder {
   }
 
   private static MethodSpec bizMethodSpec(ApiWiserBundle.CodeOperation.Op operation, Set<String> imports) {
+    final var queryParamMaxInLine = operation.queryParamMaxInLine();
     final var extendedImports = new HashSet<>(imports);
     final var className = operation.baseName();
     final var methodName = operation.operationId();
@@ -92,14 +95,53 @@ public class BizBuilder {
             .addStatement("throw new $T(\"method $L::$L not implemented.\")", UnsupportedOperationException.class, className, methodName)
             .build())
         .returns(TypeRefInfo.parse(operation.returnType(), extendedImports).toTypeName());
-    Optional.of(operation)
-        .map(ApiWiserBundle.CodeOperation.Op::allParams)
-        .stream()
-        .flatMap(Collection::stream)
-        .forEach(p -> method.addParameter(ParameterSpec
-            .builder(TypeRefInfo.parse(p.dataType(), extendedImports).toTypeName(), p.name())
-            .build()));
+
+    // First, always add all body params, usually just one.
+    operationOpt
+            .stream()
+            .map(ApiWiserBundle.CodeOperation.Op::bodyParams)
+            .flatMap(Collection::stream)
+            .forEach(p -> method.addParameter(ParameterSpec
+                    .builder(TypeRefInfo.parse(p.dataType(), extendedImports).toTypeName(), p.name())
+                    .build()));
+
+    // Second, we respect the path params
+    operationOpt
+            .stream()
+            .map(ApiWiserBundle.CodeOperation.Op::pathParams)
+            .flatMap(Collection::stream)
+            .forEach(p -> method.addParameter(ParameterSpec
+                    .builder(TypeRefInfo.parse(p.dataType(), extendedImports).toTypeName(), p.name())
+                    .build()));
+
+    // Finally, we add the query parameters! Since there may be several, let’s organize them into a single class for better management.
+    final var operationId = operation.operationId();
+    final var queryParams = Optional.of(operation).map(ApiWiserBundle.CodeOperation.Op::queryParams);
+    queryParams.ifPresent(qParams -> {
+      if (qParams.size() < queryParamMaxInLine) {
+        qParams.forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
+      } else {
+        method.addParameter(ParameterSpec.builder(TypeRefInfo.parse(capitalizeWithQuery(operationId).toString(), imports)
+                .toTypeName(), QUERY).build());
+      }
+    });
+
     return method.build();
+  }
+
+  /**
+   * Creates a parameter specification for an API operation parameter.
+   *
+   * <p>This method generates the Java code for a method parameter in the HTTP client.</p>
+   *
+   * @param parameter the API parameter to generate a specification for
+   * @param extendedImports the set of imports to be extended with any additional imports needed
+   * @return the parameter specification
+   */
+  static ParameterSpec factualParameter(ApiWiserBundle.CodeParameter parameter, Set<String> extendedImports) {
+    return ParameterSpec
+            .builder(TypeRefInfo.parse(parameter.dataType(), extendedImports).toTypeName(), parameter.name())
+            .build();
   }
 
 }

@@ -87,6 +87,10 @@ public interface ApiWiserBundle {
             List<MediaType> produces();
 
             List<CodeParameter> allParams();
+            List<CodeParameter> pathParams();
+            int queryParamMaxInLine();
+            List<CodeParameter> queryParams();
+            List<CodeParameter> bodyParams();
 
             List<CodeResponse> responses();
         }

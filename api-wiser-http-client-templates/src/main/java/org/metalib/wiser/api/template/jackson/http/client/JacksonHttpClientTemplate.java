@@ -34,6 +34,7 @@ import java.util.function.Supplier;
 
 import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.metalib.wiser.api.template.ApiWiserFinals.API;
 import static org.metalib.wiser.api.template.ApiWiserFinals.API_WISER;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
@@ -56,6 +57,8 @@ import static org.metalib.wiser.api.template.jackson.http.client.JacksonHttpClie
  * codes and exceptions.</p>
  */
 public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
+
+    static final String QUERY = "query";
 
     /** The name of this template */
     public static final String TEMPLATE_NAME = "jackson-http-client";
@@ -140,6 +143,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
     public String toText(ApiWiserBundle bundle) {
         final var httpClientPackage = bundle.basePackage() + DOT + HTTP + DOT + CLIENT;
         return JavaFile.builder(httpClientPackage, httpClientTypeBuilder(bundle).build())
+                .skipJavaLangImports(true)
                 .build().toString();
     }
 
@@ -200,6 +204,7 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
      * @return the method specification for the API operation
      */
     private static MethodSpec apiMethodSpec(ApiWiserBundle.CodeOperation.Op operation, String commonPath, Set<String> imports) {
+        final var queryParamMaxInLine = operation.queryParamMaxInLine();
         final var extendedImports = new HashSet<>(imports);
         final var operationOpt = Optional.of(operation);
         final var returnType = operation.returnType();
@@ -230,14 +235,41 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(TypeRefInfo.parse(returnType, extendedImports).toTypeName());
+
+        // First, always add all body params, usually just one.
         Optional.of(operation)
-                .map(ApiWiserBundle.CodeOperation.Op::allParams)
+                .map(ApiWiserBundle.CodeOperation.Op::bodyParams)
                 .stream()
                 .flatMap(Collection::stream)
                 .forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
+
+        // Second, we respect the path params
+        Optional.of(operation)
+                .map(ApiWiserBundle.CodeOperation.Op::pathParams)
+                .stream()
+                .flatMap(Collection::stream)
+                .forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
+
+        // Finally, we add the query parameters! Since there may be several, let’s organize them into a single class for better management.
+        final var operationId = operation.operationId();
+        final var queryParams = Optional.of(operation).map(ApiWiserBundle.CodeOperation.Op::queryParams);
+        queryParams.ifPresent(qParams -> {
+            if (qParams.size() < queryParamMaxInLine) {
+                qParams.forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
+            } else {
+                method.addParameter(ParameterSpec.builder(TypeRefInfo.parse(capitalize(operationId) + "Query", imports).toTypeName(), "query").build());
+            }
+        });
+
         return method
                 .addCode(methodBody(commonPath, operationOpt))
                 .build();
+    }
+
+
+    static String getterized(String dotPrefix, String name) {
+        return Optional.ofNullable(dotPrefix).map(v -> v + DOT).orElse("") +
+                "get" + capitalize(name) + "()";
     }
 
     /**
@@ -257,20 +289,29 @@ public class JacksonHttpClientTemplate implements ApiWiserTemplateService {
                         JerseyUriBuilder.class,
                         operationOpt.map(ApiWiserBundle.CodeOperation.Op::path)
                                 .filter(v -> !v.isBlank()).orElse(commonPath));
+        final var queryParamsListed = operationOpt
+                .stream()
+                .map(ApiWiserBundle.CodeOperation.Op::queryParams)
+                .mapToLong(Collection::size)
+                .sum() < 5;
+
         operationOpt
                 .stream()
-                .map(ApiWiserBundle.CodeOperation.Op::allParams)
+                .map(ApiWiserBundle.CodeOperation.Op::queryParams)
                 .flatMap(Collection::stream)
-                .filter(ApiWiserBundle.CodeParameter::isQueryParam)
                 .forEach(p -> result
                         .addStatement("$T.ofNullable($L).ifPresent(v -> url$$.queryParam($S, $L))",
-                                Optional.class, p.name(), p.baseName(), p.name()));
+                                Optional.class,
+                                queryParamsListed ? p.name() : getterized(QUERY, p.name()),
+                                p.baseName(),
+                                queryParamsListed ? p.name() : getterized(QUERY, p.name())));
+
         final var pathParams = operationOpt
                 .stream()
-                .map(ApiWiserBundle.CodeOperation.Op::allParams)
+                .map(ApiWiserBundle.CodeOperation.Op::pathParams)
                 .flatMap(Collection::stream)
-                .filter(ApiWiserBundle.CodeParameter::isPathParam)
                 .toList();
+
         String urlBuildExpr;
         if (pathParams.isEmpty()) {
             urlBuildExpr = ".build()";

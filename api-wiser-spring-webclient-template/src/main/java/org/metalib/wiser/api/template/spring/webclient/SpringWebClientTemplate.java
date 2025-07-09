@@ -32,7 +32,9 @@ import static org.metalib.wiser.api.template.ApiWiserFinals.DASH;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DOT;
 import static org.metalib.wiser.api.template.ApiWiserFinals.DOUBLE_COLON;
 import static org.metalib.wiser.api.template.ApiWiserFinals.JAVA;
+import static org.metalib.wiser.api.template.ApiWiserFinals.QUERY_CAPITALISED;
 import static org.metalib.wiser.api.template.spring.webclient.SpringWebClientTemplateBuilder.MODULE_NAME;
+import static org.springframework.util.StringUtils.capitalize;
 
 /**
  * Template service for generating a Jackson-based HTTP client.
@@ -46,6 +48,8 @@ import static org.metalib.wiser.api.template.spring.webclient.SpringWebClientTem
  * codes and exceptions.</p>
  */
 public class SpringWebClientTemplate implements ApiWiserTemplateService {
+
+    static final String QUERY = "query";
 
     /** The name of this template */
     public static final String TEMPLATE_NAME = "spring-webclient";
@@ -122,7 +126,9 @@ public class SpringWebClientTemplate implements ApiWiserTemplateService {
     @Override
     public String toText(ApiWiserBundle bundle) {
         return JavaFile.builder(bundle.basePackage() + DOT + TEMPLATE_NAME.replace(DASH, DOT),
-                httpClientTypeBuilder(bundle).build()).build().toString();
+                httpClientTypeBuilder(bundle).build())
+                .skipJavaLangImports(true)
+                .build().toString();
     }
 
     static TypeSpec.Builder httpClientTypeBuilder(ApiWiserBundle bundle) {
@@ -146,7 +152,9 @@ public class SpringWebClientTemplate implements ApiWiserTemplateService {
     }
 
     private static MethodSpec apiMethodSpec(ApiWiserBundle.CodeOperation.Op operation, String commonPath, Set<String> imports) {
+        final var queryParamMaxInLine = operation.queryParamMaxInLine();
         final var extendedImports = new HashSet<>(imports);
+        final var operationId = operation.operationId();
         final var operationOpt = Optional.of(operation);
         final var returnType = operation.returnType();
         if (operationOpt
@@ -172,16 +180,36 @@ public class SpringWebClientTemplate implements ApiWiserTemplateService {
             extendedImports.add("java.util.Map");
         }
         final var method = MethodSpec
-                .methodBuilder(operation.operationId())
+                .methodBuilder(operationId)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(TypeRefInfo.parse(returnType, extendedImports).toTypeName());
+
+        // First, always add all body params, usually just one.
         Optional.of(operation)
-                .map(ApiWiserBundle.CodeOperation.Op::allParams)
+                .map(ApiWiserBundle.CodeOperation.Op::bodyParams)
                 .stream()
                 .flatMap(Collection::stream)
                 .forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
-        return method.addCode(methodBody(commonPath, operationOpt)).build();
+
+        // Second, we respect the path params
+        Optional.of(operation)
+                .map(ApiWiserBundle.CodeOperation.Op::pathParams)
+                .stream()
+                .flatMap(Collection::stream)
+                .forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
+
+        // Finally, we add the query parameters! Since there may be several, let’s organize them into a single class for better management.
+        final var queryParams = Optional.of(operation).map(ApiWiserBundle.CodeOperation.Op::queryParams);
+        queryParams.ifPresent(qParams -> {
+            if (qParams.size() < queryParamMaxInLine) {
+                qParams.forEach(p -> method.addParameter(factualParameter(p, extendedImports)));
+            } else {
+                method.addParameter(ParameterSpec.builder(TypeRefInfo.parse(capitalize(operationId) + QUERY_CAPITALISED, imports).toTypeName(), "query").build());
+            }
+        });
+
+        return method.addCode(methodBody(operationId, operationOpt)).build();
     }
 
     /**
@@ -199,17 +227,16 @@ public class SpringWebClientTemplate implements ApiWiserTemplateService {
                 .build();
     }
 
-    static CodeBlock methodBody(String commonPath, Optional<ApiWiserBundle.CodeOperation.Op> operationOpt) {
+    static CodeBlock methodBody(String operationId, Optional<ApiWiserBundle.CodeOperation.Op> operationOpt) {
         final var httpMethod = operationOpt.map(ApiWiserBundle.CodeOperation.Op::httpMethod).orElse("NOT_SPECIFIED");
         final var result = CodeBlock.builder();
 
-        final var path = operationOpt.map(v -> v.path()).orElse("");
+        final var path = operationOpt.map(ApiWiserBundle.CodeOperation.Op::path).orElse("");
 
         final var pathParams = operationOpt
                 .stream()
-                .map(ApiWiserBundle.CodeOperation.Op::allParams)
+                .map(ApiWiserBundle.CodeOperation.Op::pathParams)
                 .flatMap(Collection::stream)
-                .filter(ApiWiserBundle.CodeParameter::isPathParam)
                 .toList();
         if (!pathParams.isEmpty()) {
             final var pathParamsCode = CodeBlock.builder().addStatement("final var pathVars = new $T<$T,$T>()",
@@ -221,11 +248,11 @@ public class SpringWebClientTemplate implements ApiWiserTemplateService {
         operationOpt.map(ApiWiserBundle.CodeOperation.Op::returnType).ifPresent(returnType -> result.add("return "));
         result.add("client$$.$L()\n", httpMethod.toLowerCase());
 
+        final var queryParamMaxInLine = operationOpt.get().queryParamMaxInLine();
         final var queryParams = operationOpt
                 .stream()
-                .map(ApiWiserBundle.CodeOperation.Op::allParams)
+                .map(ApiWiserBundle.CodeOperation.Op::queryParams)
                 .flatMap(Collection::stream)
-                .filter(ApiWiserBundle.CodeParameter::isQueryParam)
                 .toList();
 
         if (pathParams.isEmpty() && queryParams.isEmpty()) {
@@ -233,7 +260,15 @@ public class SpringWebClientTemplate implements ApiWiserTemplateService {
         } else {
             final var uriBuilder = CodeBlock.builder();
             uriBuilder.indent().add("uri.path($S)\n", path);
-            queryParams.forEach(p -> uriBuilder.add(".queryParam($S, $L)\n", p.name(), p.name()));
+
+            if (queryParams.size() < queryParamMaxInLine) {
+                queryParams.forEach(p -> uriBuilder.add(".queryParam($S, $L)\n", p.baseName(), p.name()));
+            } else {
+                final var queryParameterClass = capitalize(operationId) + QUERY_CAPITALISED;
+                queryParams.forEach(p -> uriBuilder.add(".queryParamIfPresent($S, $T.of($L).map($L::$L))\n",
+                        p.baseName(), Optional.class, QUERY, queryParameterClass, "get" + capitalize(p.name())));
+            }
+
             result.indent().add(format(".uri(uri -> $L.build(%s))", pathParams.isEmpty() ? "" : "pathVars"),
                     uriBuilder.unindent().build());
         }

@@ -585,6 +585,116 @@ public class ApiWiserBundleModel implements ApiWiserBundle {
                     }
 
                     @Override
+                    public List<CodeParameter> pathParams() {
+                        return vv.allParams.stream().filter(vvv -> vvv.isPathParam).map(vvv -> new CodeParameter() {
+                            @Override
+                            public String dataType() {
+                                return vvv.dataType;
+                            }
+
+                            @Override
+                            public String baseName() {
+                                return vvv.baseName;
+                            }
+
+                            @Override
+                            public String name() {
+                                return vvv.paramName;
+                            }
+
+                            @Override
+                            public boolean isPathParam() {
+                                return vvv.isPathParam;
+                            }
+
+                            @Override
+                            public boolean isQueryParam() {
+                                return vvv.isQueryParam;
+                            }
+
+                            @Override
+                            public boolean isBodyParam() {
+                                return vvv.isBodyParam;
+                            }
+                        }).collect(toList());
+                    }
+
+                    @Override
+                    public int queryParamMaxInLine() {
+                        return 5;
+                    }
+
+                    @Override
+                    public List<CodeParameter> queryParams() {
+                        return vv.allParams.stream().filter(vvv -> vvv.isQueryParam).map(vvv -> new CodeParameter() {
+                            @Override
+                            public String dataType() {
+                                return vvv.dataType;
+                            }
+
+                            @Override
+                            public String baseName() {
+                                return vvv.baseName;
+                            }
+
+                            @Override
+                            public String name() {
+                                return vvv.paramName;
+                            }
+
+                            @Override
+                            public boolean isPathParam() {
+                                return vvv.isPathParam;
+                            }
+
+                            @Override
+                            public boolean isQueryParam() {
+                                return vvv.isQueryParam;
+                            }
+
+                            @Override
+                            public boolean isBodyParam() {
+                                return vvv.isBodyParam;
+                            }
+                        }).collect(toList());
+                    }
+
+                    @Override
+                    public List<CodeParameter> bodyParams() {
+                        return vv.allParams.stream().filter(vvv -> vvv.isBodyParam).map(vvv -> new CodeParameter() {
+                            @Override
+                            public String dataType() {
+                                return vvv.dataType;
+                            }
+
+                            @Override
+                            public String baseName() {
+                                return vvv.baseName;
+                            }
+
+                            @Override
+                            public String name() {
+                                return vvv.paramName;
+                            }
+
+                            @Override
+                            public boolean isPathParam() {
+                                return vvv.isPathParam;
+                            }
+
+                            @Override
+                            public boolean isQueryParam() {
+                                return vvv.isQueryParam;
+                            }
+
+                            @Override
+                            public boolean isBodyParam() {
+                                return vvv.isBodyParam;
+                            }
+                        }).collect(toList());
+                    }
+
+                    @Override
                     public List<CodeResponse> responses() {
                         return vv.responses.stream().map(vvv -> new CodeResponse() {
 

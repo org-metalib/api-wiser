@@ -60,7 +60,7 @@ public class ApiTemplate implements ApiWiserTemplateService {
     public String toText(ApiWiserBundle bundle) {
         final var apiPackage = bundle.basePackage() + DOT + TEMPLATE_NAME;
         final var api = createApiBuilder(bundle).build();
-        return JavaFile.builder(apiPackage, api).build().toString();
+        return JavaFile.builder(apiPackage, api).skipJavaLangImports(true).build().toString();
     }
 
 }
